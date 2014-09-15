@@ -8,6 +8,15 @@ import java.util.List;
 
 import com.vectorization.core.SSVector;
 
+/**
+ * A simple implementation that uses the default methods of it superclass
+ * to organise the data.  As a result the implementation of the retrieveKnn
+ * method is naive whereby a sort is run every query.
+ * 
+ * @author Robert Moss
+ *
+ * @param <E>
+ */
 public class Set<E extends SSVector> extends AbstractCollection<E> {
 
 	private static final long serialVersionUID = 2751516171619962956L;

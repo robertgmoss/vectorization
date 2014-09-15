@@ -1,5 +1,12 @@
 package com.vectorization.core;
 
+/**
+ * A decorator for vectors that provides a view whereby the vector is normalised
+ * such that the sum of all dimensions equals one.
+ * 
+ * @author Robert Moss
+ *
+ */
 public class NormalisedVector extends SSVectorDecorator {
 
 	private static final long serialVersionUID = -7461934269703184566L;

@@ -4,6 +4,16 @@ import java.util.Iterator;
 
 import com.vectorization.core.SSVector;
 
+/**
+ * Stores the vectors in such a way as to provide fast lookup using the retrieveKnn method.
+ * It implements the vantage point tree algorithm which is a binary-tree that recursively stores
+ * in its left subtree all elements that have a distance less than the median distance to its root
+ * and in the right subtree all other elements.
+ * 
+ * @author Robert Moss
+ *
+ * @param <E>
+ */
 public class VantagePointTree<E extends SSVector> implements SSCollection<E> {
 
 	public SSCollection<E> insert(E myObject) {

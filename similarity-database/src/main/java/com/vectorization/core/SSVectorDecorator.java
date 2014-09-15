@@ -1,5 +1,13 @@
 package com.vectorization.core;
 
+/**
+ * Provides a hook to allow vectors to be transformed whilst keeping
+ * existing vectors in their original form.  Classes override the public
+ * methods to provide new behaviour.
+ * 
+ * @author Robert Moss
+ *
+ */
 public abstract class SSVectorDecorator extends AbstractVector {
 
 	private static final long serialVersionUID = 9039416037284202187L;

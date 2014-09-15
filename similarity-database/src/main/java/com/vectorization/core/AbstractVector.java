@@ -1,5 +1,10 @@
 package com.vectorization.core;
-
+/**
+ * Provides default methods common to implementing classes of SSVector.
+ * 
+ * @author Robert Moss
+ *
+ */
 public abstract class AbstractVector implements SSVector {
 
 	private static final long serialVersionUID = -1714510626632574674L;

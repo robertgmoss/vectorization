@@ -8,6 +8,16 @@ import java.util.Map;
 import com.vectorization.core.SSException;
 import com.vectorization.core.SSVector;
 
+/**
+ * Provides a simple implementation that allows extension by overriding the default
+ * methods.  At the same time, provides a simple mapping to allow vectors to be
+ * reference by their identifiers.  Overriding classes should ensure that a call to
+ * super in the insert method is made to maintain this mapping.
+ * 
+ * @author Robert Moss
+ *
+ * @param <E>
+ */
 public abstract class AbstractCollection<E extends SSVector> implements
 		SSCollection<E> {
 
@@ -19,11 +29,11 @@ public abstract class AbstractCollection<E extends SSVector> implements
 		this.dimensionality = dimensionality;
 	}
 
-	public int dimensionality() {
+	public final int dimensionality() {
 		return dimensionality;
 	}
 	
-	public SSVector get(String vectorName) {
+	public final SSVector get(String vectorName) {
 		if(!vectors.containsKey(vectorName)) throw new SSException("");
 		return vectors.get(vectorName);
 	}
@@ -38,19 +48,19 @@ public abstract class AbstractCollection<E extends SSVector> implements
 		return this;
 	}
 	
-	public Iterator<E> iterator() {
+	public final Iterator<E> iterator() {
 		return vectors.values().iterator();
 	}
 	
-	public Collection<E> values(){
+	public final Collection<E> values(){
 		return vectors.values();
 	}
 	
-	public boolean contains(SSVector o) {
+	public final boolean contains(SSVector o) {
 		return vectors.containsKey(o.id());
 	}
 
-	public int size() {
+	public final int size() {
 		return vectors.size();
 	}
 

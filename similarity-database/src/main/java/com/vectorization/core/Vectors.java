@@ -2,6 +2,12 @@ package com.vectorization.core;
 
 import java.util.List;
 
+/**
+ * A convenience class for creating vectors in the system.
+ * 
+ * @author Robert Moss
+ *
+ */
 public class Vectors {
 
 	public static SSVector createNormalisedVector(String id, Double... ds) {

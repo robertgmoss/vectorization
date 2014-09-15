@@ -1,5 +1,11 @@
 package com.vectorization.core;
 
+/**
+ * Provides distance calculations according to different metric definitions
+ * 
+ * @author Robert Moss
+ *
+ */
 public class Distances {
 
 	public static double structuralEntropicDistance(SSVector x, SSVector y) {

@@ -5,6 +5,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A sparse vector implementation that saves space by only storing non-zero dimensions
+ * 
+ * @author Robert Moss
+ *
+ */
 public class SparseVector extends AbstractVector {
 
 	private static final long serialVersionUID = -6348541795286382173L;

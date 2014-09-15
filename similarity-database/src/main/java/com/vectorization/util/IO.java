@@ -9,6 +9,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * Provides convenience methods for input/output.
+ * 
+ * @author Robert Moss
+ *
+ */
 public class IO {
 	
 	public static PrintWriter createPrintWriter(OutputStream os) throws IOException {

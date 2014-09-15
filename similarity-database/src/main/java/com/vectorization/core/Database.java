@@ -14,6 +14,13 @@ import java.util.Map;
 import com.vectorization.core.collection.SSCollection;
 import com.vectorization.core.collection.Set;
 
+/**
+ * Provides a Database object to interact with persisted collections of vectors.  Loads existing
+ * instances into memory or creates a new instance during construction.  
+ *  
+ * @author Robert Moss
+ *
+ */
 public class Database {
 
 	private final String databaseName;
