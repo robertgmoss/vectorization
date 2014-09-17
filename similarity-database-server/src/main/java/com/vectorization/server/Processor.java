@@ -1,3 +1,20 @@
+/*  
+ *  Copyright (C) 2014 Robert Moss
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 package com.vectorization.server;
 
 import java.io.BufferedReader;
@@ -7,10 +24,10 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import com.vectorization.core.Database;
-import com.vectorization.core.SSException;
-import com.vectorization.server.lexer.SSLexer;
-import com.vectorization.server.parser.Parser;
-import com.vectorization.server.parser.SSParser;
+import com.vectorization.parsing.Command;
+import com.vectorization.parsing.Parser;
+import com.vectorization.parsing.ServerLexer;
+import com.vectorization.parsing.ServerParser;
 import com.vectorization.util.IO;
 
 public class Processor {
@@ -55,7 +72,7 @@ public class Processor {
 	}
 	
 	private Command parseLine(String input) {
-		Parser p = new SSParser(this, new SSLexer(input));
+		Parser<Command> p = new ServerParser(this, new ServerLexer(input));
 		return p.parse();
 	}
 	

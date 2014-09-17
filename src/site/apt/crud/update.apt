@@ -1,0 +1,20 @@
+Update vectors in a Vector Space
+
+  Updating the values of a vector requires a new vector to be inserted with the same identifier
+  as the vector to be updated.  This the same syntax as creating a new vector:
+  
++------------------------------------------
+insert <vectorid> = <vector> into <spaceid>
++------------------------------------------
+  where <vectorid> is a legal identifier in accordance with the java programming language.  <vector>
+  is a comma separated list of real numbers surrounded by square brackets, and <spaceid> refers to
+  the identifier used when a space was created.  For example:
+  
++------------------------------------------
+insert myvector = [0.2, 0.8] into myspace
++------------------------------------------
+
+=====================================================================
+
+
+  {{{./read.html}\< Previous: Read}}\ \  {{{./delete.html}Next: Delete \>}}

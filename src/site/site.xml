@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Vectorization">
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.3.1</version>
+	</skin>
+	<custom>
+		<fluidoSkin>
+			<topBarEnabled>true</topBarEnabled>
+			<sideBarEnabled>false</sideBarEnabled>
+			<skipGenerationDate>true</skipGenerationDate>
+			<breadcrumbDivider>»</breadcrumbDivider>
+			<topBarContainerStyle>width: 90%;</topBarContainerStyle>
+			<topBarIcon>
+				<name>Maven Fluido Skin</name>
+				<alt>Maven Fluido Skin</alt>
+				<src>/images/topbar-logo.png</src>
+				<href>/index.html</href>
+			</topBarIcon>
+			<gitHub>
+				<projectId>robertgmoss/vectorization</projectId>
+				<ribbonOrientation>right</ribbonOrientation>
+				<ribbonColor>black</ribbonColor>
+			</gitHub>
+			<googleSearch />
+		</fluidoSkin>
+	</custom>
+	<bannerLeft>
+		<name>Vectorization</name>
+		<src>images/logo.png</src>
+		<href>/index.html</href>
+	</bannerLeft>
+	<body>
+		<menu name="Vectorization">
+			<item name="Introduction" href="index.html" />
+			<item name="News" href="news.html" />
+			<item name="Features" href="features.html" />
+
+			<item name="Developer Resources" href="/developer/index.html"
+				collapse="true">
+				<item name="System Architecture" href="/developer/architecture.html" />
+				<item name="Embedder's Guide" href="/developer/embedding.html" />
+			</item>
+			<item name="FAQ" href="faq.html" />
+		</menu>
+		<menu name="Docs">
+			<item name="Installation" href="installation.html" collapse="true">
+				<item name="Install on Linux" href="installation.html" />
+				<item name="Install on OSX" href="installation.html" />
+				<item name="Getting Started with Vectorization" href="/installation/getting-started.html" />
+			</item>
+			<item name="Vectorization CRUD Operations" href="/crud/introduction.html"
+				collapse="true">
+				<item name="Vectorization CRUD Tutorials" href="/crud/tutorials.html" />
+			</item>
+			<item name="Configuration" href="configuration.html" />
+		</menu>
+		<menu name="Downloads">
+			<item name="Latest Release" href="download.html" />
+		</menu>
+		<!-- <menu ref="reports"/> -->
+		<breadcrumbs>
+		</breadcrumbs>
+	</body>
+</project>

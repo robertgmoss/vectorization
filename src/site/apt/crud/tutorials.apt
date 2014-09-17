@@ -1,0 +1,19 @@
+Tutorials
+
+ Here are some useful links to get you started:
+
+* {{{./create.html}Create}} 
+  
+ Learn how to create Vector Spaces
+
+* {{{./read.html}Read}}
+
+ Learn how to query your Vector Spaces
+
+* {{{./update.html}Update}}
+
+ Learn how to update the vectors in your Vector Spaces
+
+* {{{./delete.html}Delete}}
+
+ Learn how to delete vectors and Vector Spaces

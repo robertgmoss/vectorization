@@ -1,0 +1,28 @@
+Creating a Vector Space
+
++------------------------------------------
+create space <spaceid> with dimensionality <int>
++------------------------------------------
+  where <spaceid> is a legal identifier in accordance with the java programming language, and <int>
+  is an integer that specifies the size of the vectors that can be inserted into this space. For 
+  example:
+  
++------------------------------------------
+create space myspace with dimensionality 2
++------------------------------------------  
+
+Inserting vectors into a Vector Space
+
++------------------------------------------
+insert <vectorid> = <vector> into <spaceid>
++------------------------------------------
+  where <vectorid> is a legal identifier in accordance with the java programming language.  <vector>
+  is a comma separated list of real numbers surrounded by square brackets, and <spaceid> refers to
+  the identifier used when a space was created.  For example:
+  
++------------------------------------------
+insert myvector = [0.2, 0.8] into myspace
++------------------------------------------
+===========================================
+
+  {{{./read.html}Next: Read \>}}

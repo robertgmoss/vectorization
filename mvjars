@@ -1,0 +1,5 @@
+cp ./similarity-database-client/target/vectorization-client-0.0.2-SNAPSHOT.jar \
+   ./src/site/resources/downloads/vectorization-client-0.0.2-SNAPSHOT.jar
+
+cp ./similarity-database-server/target/vectorization-server-0.0.2-SNAPSHOT.jar \
+   ./src/site/resources/downloads/vectorization-server-0.0.2-SNAPSHOT.jar

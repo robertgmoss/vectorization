@@ -1,0 +1,12 @@
+Introduction to Vectorization
+
+  Welcome!   Vectorization is a database management system for vector spaces.  We provide
+  a client-server model for you to manage your vectors in your similarity applications.
+
+  Here are some useful links to get you started:
+
+* {{{/installation.html}Installation}}
+
+* {{{/crud/tutorials.html}CRUD Tutorials}}
+
+* {{{/faq.html}FAQ}}

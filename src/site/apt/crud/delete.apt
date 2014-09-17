@@ -1,0 +1,27 @@
+Delete Operations
+
+* Dropping a space from the database
+
++--------------------------
+drop <spaceid>
++--------------------------
+  where <spaceid> references a Vector Space identifier. For example:
+  
++--------------------------
+drop myspace
++--------------------------  
+
+* Removing a vector from the Vector Space
+
++-------------------------------
+remove <vectorid> from <spaceid>
++-------------------------------
+  where <vectorid> references a vector in the space, <spaceid>. For example:
+  
++-------------------------------
+remove myvector from myspace
++-------------------------------
+
+=====================================================================
+
+  {{{./update.html}\< Previous: Update}}

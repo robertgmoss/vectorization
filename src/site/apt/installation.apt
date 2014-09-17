@@ -1,0 +1,26 @@
+Installation
+
+  Currently as we are in development all systems must {{{/download.html} download}} 
+  the jar files and run manually.
+
+* Running from JARs
+
+** Running the Vectorization Server
+  
+  to run the server as a background task enter:
+  
++---------------------------------------
+java -jar vectorization-server-XXX.jar &
++---------------------------------------
+
+  replacing XXX with the version number you have downloaded
+
+** Running the Vectorization Client
+
+  to run the client enter:
+  
++-------------------------------------
+java -jar vectorization-client-XXX.jar
++-------------------------------------
+
+  replacing XXX with the version number you have downloaded
