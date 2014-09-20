@@ -17,7 +17,7 @@
  */
 package com.vectorization.parsing;
 
-import com.vectorization.core.Database;
+import com.vectorization.core.database.Database;
 
 public interface Command {
 

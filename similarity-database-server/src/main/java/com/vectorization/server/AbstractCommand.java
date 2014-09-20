@@ -17,11 +17,11 @@
  */
 package com.vectorization.server;
 
-import com.vectorization.core.Database;
 import com.vectorization.core.SSException;
+import com.vectorization.core.database.Database;
 import com.vectorization.parsing.Command;
 
-public class AbstractCommand implements Command{
+public abstract class AbstractCommand implements Command{
 
 	public String execute(Database database) {
 		if(database == null) throw new SSException("Database is null");

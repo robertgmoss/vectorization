@@ -17,7 +17,7 @@
  */
 package com.vectorization.server;
 
-import com.vectorization.core.Database;
+import com.vectorization.core.database.Database;
 
 public class Null extends AbstractCommand {
 

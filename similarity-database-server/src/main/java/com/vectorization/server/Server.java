@@ -23,7 +23,16 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.util.Factory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Server {
+	
+	private static final Logger log = LoggerFactory.getLogger(Server.class);
 
 	private ServerSocket serverSocket;
 	private ExecutorService threadPool;
@@ -59,7 +68,7 @@ public class Server {
 					Processor p = new Processor(clientSocket.getOutputStream());
 					p.process(clientSocket.getInputStream());
 				} catch (IOException e) {
-					e.printStackTrace();
+					log.error(e.getMessage());
 				}
 			}
 		};
@@ -71,6 +80,9 @@ public class Server {
 
 
 	public static void main(String[] args) {
+		Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:users.ini");
+		SecurityManager securityManager = factory.getInstance();
+		SecurityUtils.setSecurityManager(securityManager);
 		new Server(4567);
 	}
 

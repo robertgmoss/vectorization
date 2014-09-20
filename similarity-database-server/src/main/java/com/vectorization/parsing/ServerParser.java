@@ -20,25 +20,19 @@ package com.vectorization.parsing;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vectorization.core.Database;
 import com.vectorization.core.SSVector;
 import com.vectorization.core.Vectors;
+import com.vectorization.core.database.Database;
 import com.vectorization.parsing.ServerLexer.SSType;
-import com.vectorization.server.Create;
-import com.vectorization.server.Drop;
-import com.vectorization.server.Find;
-import com.vectorization.server.FindVector;
-import com.vectorization.server.Insert;
-import com.vectorization.server.Null;
+import com.vectorization.server.CommandFactory;
+import com.vectorization.server.DefaultCommandFactory;
 import com.vectorization.server.Processor;
-import com.vectorization.server.Remove;
-import com.vectorization.server.Select;
-import com.vectorization.server.Show;
-import com.vectorization.server.Use;
+import com.vectorization.server.SecureCommandFactory;
 
 public class ServerParser extends Parser<Command> {
 
 	private Processor processor;
+	private CommandFactory factory = new SecureCommandFactory(new DefaultCommandFactory());
 
 	public ServerParser(Processor processor, Lexer l) {
 		super(l);
@@ -48,6 +42,7 @@ public class ServerParser extends Parser<Command> {
 	@Override
 	public Command parse() {
 		if (getLookAhead().type.equals(SSType.NAME)) {
+			if (getLookAhead().val.equals("login")) { return login(); }
 			if (getLookAhead().val.equals("use")) { return use(); }
 			if (getLookAhead().val.equals("create")) { return create(); }
 			if (getLookAhead().val.equals("drop")) { return drop(); }
@@ -55,42 +50,44 @@ public class ServerParser extends Parser<Command> {
 			if (getLookAhead().val.equals("insert")) { return insert(); }
 			if (getLookAhead().val.equals("remove")) { return remove(); }
 			if (getLookAhead().val.equals("list")) { return list(); }
-			if (getLookAhead().val.equals("select")) { return select(); }
 			if (getLookAhead().val.equals("show")) { return show(); }
 		}
-		return new Null("No such command");
+		return factory.newNullCommand("No such command");
+	}
+
+	private Command login() {
+		match(SSType.NAME, "login");
+		String username = name();
+		match(SSType.NAME, "with");
+		String password = name();
+		return factory.newLoginCommand(username, password);
 	}
 
 	private Command use() {
 		match(SSType.NAME, "use");
 		String databaseName = name();
-		processor.setDatabase(new Database(databaseName));
-		return new Use(databaseName);
+		Database database = factory.newDatabase(databaseName);
+		processor.setDatabase(database);
+		return factory.newUseCommand(databaseName);
 	}
 
 	private Command show() {
 		match(SSType.NAME, "show");
-		String tableName = "";
+		String spaceName = "";
 		if (!getLookAhead().type.equals(SSType.EOF_TYPE)) {
-			tableName = name();
+			spaceName = name();
 		}
 		String vectorName = "";
 		if (getLookAhead().type.equals(SSType.DOT)) {
 			match(SSType.DOT);
 			vectorName = name();
 		}
-		return new Show(tableName, vectorName);
-	}
-
-	private Command select() {
-		match(SSType.NAME, "select");
-		String tableName = name();
-		return new Select(tableName);
+		return factory.newShowCommand(spaceName, vectorName);
 	}
 
 	private Command list() {
 		match(SSType.NAME, "list");
-		return new com.vectorization.server.List();
+		return factory.newListCommand();
 	}
 
 	private Command insert() {
@@ -100,7 +97,7 @@ public class ServerParser extends Parser<Command> {
 		SSVector v = vector(vectorName);
 		match(SSType.NAME, "into");
 		String tableName = name();
-		return new Insert(v, tableName);
+		return factory.newInsertCommand(tableName, v);
 	}
 	
 	private Command remove() {
@@ -108,7 +105,7 @@ public class ServerParser extends Parser<Command> {
 		String vectorName = name();
 		match(SSType.NAME, "from");
 		String tableName = name();
-		return new Remove(tableName, vectorName);
+		return factory.newRemoveCommand(tableName, vectorName);
 	}
 
 	private Command find() {
@@ -120,34 +117,32 @@ public class ServerParser extends Parser<Command> {
 		if (getLookAhead().type.equals(SSType.LBRACK)) {
 			v = vector("");
 			match(SSType.NAME, "in");
-			String tableName = name();
-			return new Find(k, v, tableName);
+			String spaceName = name();
+			return factory.newFindCommand(spaceName, k, v);
 		}else{
-			String tableName = name();
+			String querySpaceName = name();
 			match(SSType.DOT);
-			String vectorName = name();
+			String queryVectorName = name();
 			match(SSType.NAME, "in");
-			String space = name();
-			return new FindVector(k, tableName, vectorName, space);
+			String spaceName = name();
+			return factory.newFindVectorCommand(spaceName, k, querySpaceName, queryVectorName);
 		}
-		
-		
 	}
 
 	private Command create() {
 		match(SSType.NAME, "create");
 		match(SSType.NAME, "space");
-		String tableName = name();
+		String spaceName = name();
 		match(SSType.NAME, "with");
 		match(SSType.NAME, "dimensionality");
 		int dimensionality = integer();
-		return new Create(tableName, dimensionality);
+		return factory.newCreateCommand(spaceName, dimensionality);
 	}
 
 	private Command drop() {
 		match(SSType.NAME, "drop");
-		String tableName = name();
-		return new Drop(tableName);
+		String spaceName = name();
+		return factory.newDropCommand(spaceName);
 	}
 
 	private String name() {

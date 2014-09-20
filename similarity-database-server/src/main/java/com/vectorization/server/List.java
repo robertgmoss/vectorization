@@ -19,7 +19,7 @@ package com.vectorization.server;
 
 import java.util.Iterator;
 
-import com.vectorization.core.Database;
+import com.vectorization.core.database.Database;
 
 public class List extends AbstractCommand {
 

@@ -26,6 +26,8 @@ import org.junit.Test;
 
 import com.vectorization.core.collection.SSCollection;
 import com.vectorization.core.collection.Space;
+import com.vectorization.core.database.Database;
+import com.vectorization.core.database.DatabaseImpl;
 
 public class CRUDTest {
 
@@ -33,10 +35,11 @@ public class CRUDTest {
 
 	@Before
 	public void setUp() {
-		database = new Database("Test");
+		database = new DatabaseImpl("Test");
 		database.drop("large");
 		database.create("test", 2);
-		database.insert(Vectors.createNormalisedVector("1", 0.8, 0.5)).insert(
+		database.insertAndSave("test",
+				Vectors.createNormalisedVector("1", 0.8, 0.5),
 				Vectors.createNormalisedVector("2", 0.25, 0.75));
 	}
 
@@ -47,22 +50,6 @@ public class CRUDTest {
 		database.drop("large");
 	}
 
-	@Test(expected = SSException.class)
-	public void testSelect() {
-		String table = "mydata";
-		database.select(table);
-	}
-
-	@Test(expected = SSException.class)
-	public void testCreate() {
-		String table = "mydata";
-		Assert.assertFalse(table.equals(database.getCurrentTableName()));
-		database.create(table, 2);
-		Assert.assertTrue(table.equals(database.getCurrentTableName()));
-
-		database.create(null, 0); // throws exception
-	}
-
 	@Test
 	public void testRetrieve() {
 		SSCollection<SSVector> expected = new Space<SSVector>(2, Arrays.asList(
@@ -70,15 +57,15 @@ public class CRUDTest {
 				Vectors.createNormalisedVector("2", 0.25, 0.75)));
 		int k = expected.size();
 		SSVector prototype = Vectors.createNormalisedVector("", 1.0, 0.0);
-		SSCollection<? extends SSVector> result = database.select("test")
-				.retrieveKnn(k, prototype);
+		SSCollection<? extends SSVector> result = database.retrieveKnn("test", k,
+				prototype);
 		for (SSVector o : expected) {
 			Assert.assertTrue(result.contains(o));
 		}
 		System.out.println(result);
 	}
 
-	//@Test
+	// @Test
 	public void testRetrieveFromLargeSpace() {
 		database.create("large", 2);
 		SSVector[] vs = new SSVector[1000000];
@@ -86,12 +73,12 @@ public class CRUDTest {
 			vs[i] = Vectors.createNormalisedVector("" + i, Math.random(),
 					Math.random());
 		}
-		database.insert(vs);
+		database.insertAndSave("large", vs);
 		System.out.println("searching...");
 		System.out.println(database.retrieveKnn(
+				"large",
 				1,
-				Vectors.createNormalisedVector("q", Math.random(),
-						Math.random())));
+				Vectors.createNormalisedVector("q", Math.random(), Math.random())));
 		System.out.println();
 	}
 }

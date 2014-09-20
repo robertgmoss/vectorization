@@ -17,10 +17,10 @@
  */
 package com.vectorization.server;
 
-import com.vectorization.core.Database;
 import com.vectorization.core.SSException;
 import com.vectorization.core.SSVector;
 import com.vectorization.core.Vectors;
+import com.vectorization.core.database.Database;
 
 public class Insert extends AbstractCommand  {
 

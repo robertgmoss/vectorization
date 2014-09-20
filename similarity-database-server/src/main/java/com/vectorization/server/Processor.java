@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import com.vectorization.core.Database;
+import com.vectorization.core.database.Database;
 import com.vectorization.parsing.Command;
 import com.vectorization.parsing.Parser;
 import com.vectorization.parsing.ServerLexer;

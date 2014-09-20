@@ -17,7 +17,8 @@
  */
 package com.vectorization.server;
 
-import com.vectorization.core.Database;
+import com.vectorization.core.SSException;
+import com.vectorization.core.database.Database;
 
 public class Show extends AbstractCommand  {
 
@@ -32,7 +33,7 @@ public class Show extends AbstractCommand  {
 	public String execute(Database database) {
 		super.execute(database);
 		String result = "";
-		if (tableName.equals("")) result = database.show().toString();
+		if (tableName.equals("")) throw new SSException("No space selected");
 		else if(vectorName.equals("")) result = database.show(tableName).toString();
 		else result = database.show(tableName, vectorName).toString();
 		return result;

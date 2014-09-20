@@ -30,11 +30,11 @@ public class Client {
 
 	private Handler handler;
 
-	public Client(String database, String address, int port) {
+	public Client(String address, int port, String username, String password) {
 		try {
 			handler = createHandler(address, port);
 			printWelcome();
-			useDatabase(database);
+			login(username, password);
 			processInput();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -56,9 +56,9 @@ public class Client {
 		}
 	}
 
-	private void useDatabase(String database) {
-		System.out.println("loading...");
-		sendRequest("use " + database);
+	private void login(String username, String password) {
+		System.out.println("logging in...");
+		sendRequest("login " + username + " with " + password);
 		prompt();
 	}
 
@@ -93,7 +93,7 @@ public class Client {
 	}
 
 	public static void main(String[] args) {
-		new Client("Test", "localhost", 4567);
+		new Client("localhost", 4567, "root", "secret");
 	}
 
 }

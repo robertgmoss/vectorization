@@ -33,7 +33,7 @@ public class SSException extends RuntimeException {
 		super(msg);
 	}
 
-	public SSException(IOException e) {
+	public SSException(Exception e) {
 		super(e);
 	}
 

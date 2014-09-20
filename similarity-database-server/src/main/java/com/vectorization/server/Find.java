@@ -17,9 +17,9 @@
  */
 package com.vectorization.server;
 
-import com.vectorization.core.Database;
 import com.vectorization.core.SSVector;
 import com.vectorization.core.collection.SSCollection;
+import com.vectorization.core.database.Database;
 
 public class Find extends AbstractCommand  {
 
@@ -36,7 +36,7 @@ public class Find extends AbstractCommand  {
 	public String execute(Database database) {
 		super.execute(database);
 		
-		SSCollection<SSVector> result = database.retrieveKnn(k, v, tableName);
+		SSCollection<SSVector> result = database.retrieveKnn(tableName, k, v);
 		return result.toString();
 	}
 }

@@ -17,7 +17,7 @@
  */
 package com.vectorization.server;
 
-import com.vectorization.core.Database;
+import com.vectorization.core.database.Database;
 import com.vectorization.parsing.Command;
 
 public class Use implements Command {

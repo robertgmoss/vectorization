@@ -4,7 +4,7 @@
 
 	<groupId>com.vectorization</groupId>
 	<artifactId>vectorization</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Vectorization Similarity Database</name>
 
@@ -18,6 +18,11 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-build-plugin</artifactId>
+					<version>1.4</version>
+				</plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
 					<version>2.0-beta-9</version>
@@ -25,26 +30,61 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
 					<configuration>
 						<source>1.5</source>
 						<target>1.5</target>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.4</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.0</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-ssh</artifactId>
+							<version>2.0</version>
+						</dependency>
+					</dependencies>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.6.1</version>
+		</dependency>
 	</dependencies>
 
 	<scm>
 		<connection>scm:git:git@github.com:robertgmoss/vectorization.git</connection>
 		<url>scm:git:git@github.com:robertgmoss/vectorization.git</url>
-		<developerConnection>scm:git:git@github.com:tobrien/git-demo.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:robertgmoss/vectorization.git</developerConnection>
 	</scm>
+
+	<distributionManagement>
+		<site>
+			<id>vectorization-website</id>
+			<url>scp://vectorization.robertgmoss.co.uk/home/robert/www/vectorization.robertgmoss.co.uk</url>
+		</site>
+	</distributionManagement>
 </project>

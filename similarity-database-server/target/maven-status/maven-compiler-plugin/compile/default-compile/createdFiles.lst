@@ -1,5 +1,7 @@
+com/vectorization/server/DefaultCommandFactory.class
 com/vectorization/server/Null.class
 com/vectorization/parsing/ServerLexer$SSType.class
+com/vectorization/server/CommandFactory.class
 com/vectorization/parsing/ServerLexer.class
 com/vectorization/server/Create.class
 com/vectorization/server/Processor.class
@@ -12,7 +14,9 @@ com/vectorization/server/List.class
 com/vectorization/server/Find.class
 com/vectorization/parsing/ServerParser.class
 com/vectorization/server/Remove.class
+com/vectorization/server/Login.class
 com/vectorization/server/AbstractCommand.class
-com/vectorization/server/Select.class
+com/vectorization/server/SecureCommandFactory.class
 com/vectorization/server/Drop.class
 com/vectorization/server/Server$1.class
+com/vectorization/server/SecureCommand.class
