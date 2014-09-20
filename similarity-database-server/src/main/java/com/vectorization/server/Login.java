@@ -42,7 +42,7 @@ public class Login extends AbstractCommand {
 			token.setRememberMe(true);
 			try {
 				currentUser.login(token);
-				return username + " logged in successfully";
+				return "user: "+username + " logged in successfully";
 			} catch (Exception e) {
 				throw new SSException("Login failed");
 			}

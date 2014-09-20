@@ -24,11 +24,8 @@ import com.vectorization.parsing.Parser;
 
 public class LocalHandler extends AbstractHandler {
 
-//	private Set<String> keywords = new LinkedHashSet<String>();
-
 	public LocalHandler(AbstractHandler successor) {
 		super(successor);
-//		keywords.addAll(Arrays.asList("quit", "exit"));
 	}
 
 	@Override
@@ -42,19 +39,6 @@ public class LocalHandler extends AbstractHandler {
 		
 		Parser<ClientCommand> p = new ClientParser(new ClientLexer(command), forward);
 		return p.parse().execute(this);
-				
-//		if (!keywords.contains(command.toLowerCase())) return forward(command);
-//		// handle locally
-//		if (command.equals("quit") || command.equals("exit")) quit();
-//		String result = command;
-//		return result;
 	}
-	
-	
-
-//	private void quit() {
-//		System.out.println("Bye!");
-//		System.exit(0);
-//	}
 
 }
