@@ -15,11 +15,18 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.vectorization.parsing;
+package com.vectorization.driver.builders;
 
-import com.vectorization.driver.Handler;
+public class Builder{
 
-public interface ClientCommand {
+	private String statement;
 
-	public String execute(Handler database);
+	public Builder(String statement) {
+		this.statement = statement;
+	}
+	
+	public String build(){
+		return statement;
+	}
 }
+

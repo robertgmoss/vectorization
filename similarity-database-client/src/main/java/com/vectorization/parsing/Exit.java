@@ -17,7 +17,7 @@
  */
 package com.vectorization.parsing;
 
-import com.vectorization.client.Handler;
+import com.vectorization.driver.Handler;
 
 public class Exit implements ClientCommand {
 

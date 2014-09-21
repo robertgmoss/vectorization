@@ -15,11 +15,38 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.vectorization.parsing;
+package com.vectorization.driver;
 
-import com.vectorization.driver.Handler;
+import com.vectorization.core.SSVector;
+import com.vectorization.core.collection.SSCollection;
+import com.vectorization.core.collection.Space;
 
-public interface ClientCommand {
+public class Statement {
+	
+	private Handler handler;
 
-	public String execute(Handler database);
+	public Statement(Handler handler) {
+		this.handler = handler;
+	}
+
+	/**
+	 * Assumes the type of query passed will result in a space being returned.
+	 * @param query
+	 * @return
+	 */
+	public SSCollection<SSVector> executeQuery(String query){
+		String result = execute(query);
+		System.out.println(result);
+		// do something with result
+		return new Space<SSVector>(0);
+	}
+	
+	public String execute(String statement){
+		return handler.processRequest(statement);
+	}
+	
+	public SSCollection<SSVector> getResult(){
+		return null;
+	}
+
 }

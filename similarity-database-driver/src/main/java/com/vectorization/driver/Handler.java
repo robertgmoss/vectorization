@@ -15,28 +15,9 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.vectorization.client;
+package com.vectorization.driver;
 
-public abstract class AbstractHandler implements Handler {
+public interface Handler {
 
-	public static final AbstractHandler NULL_HANDLER = new AbstractHandler(null) { };
-	private AbstractHandler successor;
-
-	public AbstractHandler(AbstractHandler successor) {
-		this.successor = successor;
-	}
-
-	public AbstractHandler() {
-		this(NULL_HANDLER);
-	}
-
-	public String processRequest(String command) {
-		return command;
-
-	}
-
-	protected String forward(String command) {
-		return this.successor.processRequest(command);
-	}
-
+	public String processRequest(String command);
 }

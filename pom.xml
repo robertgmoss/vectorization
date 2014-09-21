@@ -11,6 +11,7 @@
 		<module>similarity-database-server</module>
 		<module>similarity-database-client</module>
 		<module>similarity-database</module>
+		<module>similarity-database-driver</module>
 	</modules>
 
 	<build>

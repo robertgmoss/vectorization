@@ -15,37 +15,23 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.vectorization.client;
+package com.vectorization.driver.builders;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.vectorization.core.SSVector;
 
-public class RemoteHandler extends AbstractHandler {
-
-	private PrintWriter out;
-	private BufferedReader in;
-
-	public RemoteHandler(BufferedReader in, PrintWriter out) {
-		this.in = in;
-		this.out = out;
+public class FindBuilder {
+	
+	private String statement;
+	
+	public FindBuilder(String string) {
+		statement = string;
 	}
 
-	@Override
-	public String processRequest(String command) {
-		// now assumes all commands are handled by the server
-		// System.out.println("processing command:" + command);
-		out.println(command);
-		try {
-			StringBuilder sb = new StringBuilder();
-			sb.append(in.readLine());
-			while (in.ready()) {
-				sb.append("\n" + in.readLine());
-			}
-			return sb.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	public FindBuilder2 nearestTo(String id){
+		return new FindBuilder2(statement + " nearest to " + id);
 	}
-
+	
+	public FindBuilder2 nearestTo(SSVector v){
+		return new FindBuilder2(statement + " nearest to " + v.toString());
+	}
 }

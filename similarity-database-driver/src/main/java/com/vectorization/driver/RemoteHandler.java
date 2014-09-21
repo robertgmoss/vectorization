@@ -15,11 +15,37 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.vectorization.parsing;
+package com.vectorization.driver;
 
-import com.vectorization.driver.Handler;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-public interface ClientCommand {
+public class RemoteHandler extends AbstractHandler {
 
-	public String execute(Handler database);
+	private PrintWriter out;
+	private BufferedReader in;
+
+	public RemoteHandler(BufferedReader in, PrintWriter out) {
+		this.in = in;
+		this.out = out;
+	}
+
+	@Override
+	public String processRequest(String command) {
+		// now assumes all commands are handled by the server
+		// System.out.println("processing command:" + command);
+		out.println(command);
+		try {
+			StringBuilder sb = new StringBuilder();
+			sb.append(in.readLine());
+			while (in.ready()) {
+				sb.append("\n" + in.readLine());
+			}
+			return sb.toString();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }

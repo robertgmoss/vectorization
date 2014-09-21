@@ -15,11 +15,17 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.vectorization.parsing;
+package com.vectorization.driver.builders;
 
-import com.vectorization.driver.Handler;
+public class CreateBuilder {
+	
+	private String statement;
 
-public interface ClientCommand {
-
-	public String execute(Handler database);
+	public CreateBuilder(String statement) {
+		this.statement = statement;
+	}
+	
+	public Builder withDimensionality(int n){
+		return new Builder(statement + " with dimensionality " + n);
+	}
 }

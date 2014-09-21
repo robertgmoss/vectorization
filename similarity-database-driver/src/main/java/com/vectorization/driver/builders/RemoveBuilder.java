@@ -15,9 +15,16 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.vectorization.client;
+package com.vectorization.driver.builders;
 
-public interface Handler {
-
-	public String processRequest(String command);
+public class RemoveBuilder{
+	private String statement;
+	
+	public RemoveBuilder(String statement) {
+		this.statement = statement;
+	}
+	
+	public Builder from(String space){
+		return new Builder(statement + " from " + space);
+	}
 }

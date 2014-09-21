@@ -17,6 +17,8 @@
  */
 package com.vectorization.client;
 
+import com.vectorization.driver.AbstractHandler;
+import com.vectorization.driver.Handler;
 import com.vectorization.parsing.ClientCommand;
 import com.vectorization.parsing.ClientLexer;
 import com.vectorization.parsing.ClientParser;
@@ -24,8 +26,8 @@ import com.vectorization.parsing.Parser;
 
 public class LocalHandler extends AbstractHandler {
 
-	public LocalHandler(AbstractHandler successor) {
-		super(successor);
+	public LocalHandler(Handler handler) {
+		super(handler);
 	}
 
 	@Override

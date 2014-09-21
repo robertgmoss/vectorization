@@ -15,11 +15,14 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.vectorization.parsing;
+package com.vectorization.driver;
 
-import com.vectorization.driver.Handler;
+public class Vectorization{
+	
+	public static final String DEFAULT_ADDRESS = "localhost";
+	public static final int DEFAULT_PORT = 4567;
 
-public interface ClientCommand {
-
-	public String execute(Handler database);
+	public Connection getConnection(){
+		return new Connection(DEFAULT_ADDRESS, DEFAULT_PORT);
+	}
 }

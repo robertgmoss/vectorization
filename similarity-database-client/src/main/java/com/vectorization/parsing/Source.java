@@ -21,7 +21,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import com.vectorization.client.Handler;
+import com.vectorization.driver.Handler;
 import com.vectorization.util.IO;
 
 public class Source implements ClientCommand {

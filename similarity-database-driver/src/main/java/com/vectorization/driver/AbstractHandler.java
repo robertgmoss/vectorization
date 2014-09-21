@@ -15,11 +15,28 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.vectorization.parsing;
+package com.vectorization.driver;
 
-import com.vectorization.driver.Handler;
+public abstract class AbstractHandler implements Handler {
 
-public interface ClientCommand {
+	public static final Handler NULL_HANDLER = new AbstractHandler(null) { };
+	private Handler successor;
 
-	public String execute(Handler database);
+	public AbstractHandler(Handler handler) {
+		this.successor = handler;
+	}
+
+	public AbstractHandler() {
+		this(NULL_HANDLER);
+	}
+
+	public String processRequest(String command) {
+		return command;
+
+	}
+
+	protected String forward(String command) {
+		return this.successor.processRequest(command);
+	}
+
 }
