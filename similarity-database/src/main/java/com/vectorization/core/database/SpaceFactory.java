@@ -19,13 +19,12 @@ package com.vectorization.core.database;
 
 import java.util.Collection;
 
-import com.vectorization.core.SSVector;
-import com.vectorization.core.collection.SSCollection;
+import com.vectorization.core.collection.VectorCollection;
 
 public interface SpaceFactory {
 
-	SSCollection<SSVector> createSpace(int dimensionality);
+	VectorCollection createSpace(int dimensionality);
 
-	SSCollection<SSVector> createCompositeTable(int dimensionality, 
-			Collection<SSCollection<SSVector>> list);
+	VectorCollection createCompositeTable(int dimensionality, 
+			Collection<VectorCollection> list);
 }

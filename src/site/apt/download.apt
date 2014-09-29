@@ -2,8 +2,16 @@ Download
 
 * Vectorization Server
 
-  {{{/downloads/vectorization-server-0.0.2-SNAPSHOT.jar} download vectorization-server}}
+  {{{/downloads/vectorization-server-0.0.4-SNAPSHOT.jar} download vectorization-server}}
 
 * Vectorization Client
   
-  {{{/downloads/vectorization-client-0.0.2-SNAPSHOT.jar} download vectorization-client}}
+  {{{/downloads/vectorization-client-0.0.4-SNAPSHOT.jar} download vectorization-client}}
+  
+* Vectorization Driver
+
+  {{{/downloads/vectorization-driver-0.0.4-SNAPSHOT.jar} download vectorization-driver}}
+
+===========================================================================================
+
+  See {{{/installation.html}Installation}} for instructions for how to install.

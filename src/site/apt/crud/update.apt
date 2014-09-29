@@ -14,6 +14,15 @@ insert <vectorid> = <vector> into <spaceid>
 insert myvector = [0.2, 0.8] into myspace
 +------------------------------------------
 
+  Using the Java driver api, you can also do this programmatically by passing a Connection
+  to a StatementBuilder:
+  
++--
+String response = StatementBuilders.insert(Vectors.createVector("myvector", 0.2, 0.8))
+				.into("myspace")
+				.execute(connection);
++--
+
 =====================================================================
 
 

@@ -21,13 +21,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.vectorization.core.SSException;
+import com.vectorization.core.VectorizationException;
 import com.vectorization.driver.Connection;
 import com.vectorization.driver.Handler;
 import com.vectorization.driver.Vectorization;
 import com.vectorization.util.IO;
 
-public class ClientConnection extends Connection{
+public class ClientConnection extends Connection {
 
 	private BufferedReader stdIn = IO.createBufferedReader(System.in);
 
@@ -55,7 +55,8 @@ public class ClientConnection extends Connection{
 	private void processInput(BufferedReader stdIn) throws IOException {
 		String userInput;
 		prompt();
-		if(stdIn == null) System.out.println("DEBUG: stdin is null");
+		if (stdIn == null)
+			System.out.println("DEBUG: stdin is null");
 		while ((userInput = stdIn.readLine()) != null) {
 			sendRequest(userInput);
 			prompt();
@@ -67,7 +68,7 @@ public class ClientConnection extends Connection{
 	}
 
 	protected Handler createHandler(BufferedReader in, PrintWriter out) {
-		return new LocalHandler(super.createHandler(in, out));
+		return new LocalHandler(stdIn, super.createHandler(in, out));
 	}
 
 	private void printWelcome() {
@@ -86,7 +87,7 @@ public class ClientConnection extends Connection{
 		try {
 			return stdIn.readLine();
 		} catch (IOException e) {
-			throw new SSException(e);
+			throw new VectorizationException(e);
 		}
 	}
 
@@ -95,7 +96,11 @@ public class ClientConnection extends Connection{
 	}
 
 	private void sendRequest(String request) {
-		System.out.println(createStatement().execute(request));
+		try {
+			System.out.println(createStatement().execute(request));
+		} catch (VectorizationException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public void close() {

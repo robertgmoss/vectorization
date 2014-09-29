@@ -17,21 +17,30 @@
  */
 package com.vectorization.driver.builders;
 
-import com.vectorization.core.SSVector;
+import com.vectorization.core.Vector;
 
-public class FindBuilder {
+public class FindBuilder extends StatementBuilder{
 	
-	private String statement;
+	public static class FindBuilderIntermediate extends StatementBuilder{
+		
+		public FindBuilderIntermediate(String string) {
+			super(string);
+		}
+
+		public QueryBuilder in(String id){
+			return new QueryBuilder(getStatement() + " in " + id);
+		}
+	}
 	
 	public FindBuilder(String string) {
-		statement = string;
+		super(string);
 	}
 
-	public FindBuilder2 nearestTo(String id){
-		return new FindBuilder2(statement + " nearest to " + id);
+	public FindBuilderIntermediate nearestTo(String id){
+		return new FindBuilderIntermediate(getStatement() + " nearest to " + id);
 	}
 	
-	public FindBuilder2 nearestTo(SSVector v){
-		return new FindBuilder2(statement + " nearest to " + v.toString());
+	public FindBuilderIntermediate nearestTo(Vector v){
+		return new FindBuilderIntermediate(getStatement() + " nearest to " + v.toString());
 	}
 }

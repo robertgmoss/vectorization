@@ -17,16 +17,22 @@
  */
 package com.vectorization.driver.builders;
 
-public class Builder{
+import com.vectorization.driver.Connection;
+import com.vectorization.driver.Statement;
 
-	private String statement;
+public class Builder extends StatementBuilder{
 
 	public Builder(String statement) {
-		this.statement = statement;
+		super(statement);
 	}
 	
 	public String build(){
-		return statement;
+		return getStatement();
+	}
+	
+	public String execute(Connection conn){
+		Statement statement = conn.createStatement();
+		return statement.execute(getStatement());
 	}
 }
 

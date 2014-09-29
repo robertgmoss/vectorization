@@ -17,12 +17,16 @@
  */
 package com.vectorization.driver.builders;
 
-import com.vectorization.core.SSVector;
+import com.vectorization.core.Vector;
 
 public class StatementBuilders {
 	
-	public static Builder use(String database){
-		return new Builder("use " + database);
+	public static AddUserBuilder addUser(String user){
+		return new AddUserBuilder("add user " + user);
+	}
+	
+	public static ChangePasswordBuilder changePassword(String password){
+		return new ChangePasswordBuilder("change password ");
 	}
 	
 	public static CreateBuilder create(String spaceName){
@@ -37,24 +41,36 @@ public class StatementBuilders {
 		return new FindBuilder("find " + number);
 	}
 	
-	public static InsertBuilder insert(String id, SSVector v){
-		return new InsertBuilder("insert " + id + "=" + v);
+	public static GrantBuilder grant(String... command){
+		return new GrantBuilder("grant ", command);
+	}
+
+	public static InsertBuilder insert(Vector v){
+		return new InsertBuilder("insert " + v);
 	}
 	
 	public static Builder list(){
 		return new Builder("list");
 	}
 	
-	public static Builder show(String space, String id){
-		return new Builder("show " + space + "." + id);
-	}
-	
-	public static Builder show(String space){
-		return new Builder("show " + space);
+	public static LoginBuilder login(String user){
+		return new LoginBuilder("login " + user);
 	}
 	
 	public static RemoveBuilder remove(String id){
 		return new RemoveBuilder("remove " + id);
+	}
+
+	public static QueryBuilder show(String space, String id){
+		return new QueryBuilder("show " + space + "." + id);
+	}
+	
+	public static QueryBuilder show(String space){
+		return new QueryBuilder("show " + space);
+	}
+
+	public static Builder use(String database){
+		return new Builder("use " + database);
 	}
 
 }

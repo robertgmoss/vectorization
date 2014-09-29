@@ -17,11 +17,13 @@
  */
 package com.vectorization.parsing;
 
+import java.io.BufferedReader;
+
 import com.vectorization.driver.Handler;
 
 public class Exit implements ClientCommand {
 
-	public String execute(Handler database) {
+	public String execute(Handler database, BufferedReader br) {
 		System.out.println("Bye!");
 		System.exit(0);
 		return null;

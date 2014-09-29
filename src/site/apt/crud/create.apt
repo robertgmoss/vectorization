@@ -1,3 +1,17 @@
+Creating a Database
+
++------------------------------------------
+use <databasename>
++------------------------------------------
+  where <databasename> is a legal identifier in accordance with the java programming language.
+    
+  Using the Java driver api, you can also do this programmatically by passing a Connection
+  to a StatementBuilder:
+  
++--
+String response = StatementBuilders.use("Test").execute(connection);
++--
+
 Creating a Vector Space
 
 +------------------------------------------
@@ -9,7 +23,16 @@ create space <spaceid> with dimensionality <int>
   
 +------------------------------------------
 create space myspace with dimensionality 2
-+------------------------------------------  
++------------------------------------------
+
+  Using the Java driver api, you can also do this programmatically by passing a Connection
+  to a StatementBuilder:
+  
++--
+String response = StatementBuilders.create("myspace")
+				.withDimensionality(2)
+				.execute(connection);
++--  
 
 Inserting vectors into a Vector Space
 
@@ -23,6 +46,15 @@ insert <vectorid> = <vector> into <spaceid>
 +------------------------------------------
 insert myvector = [0.2, 0.8] into myspace
 +------------------------------------------
+
+  Using the Java driver api, you can also do this programmatically by passing a Connection
+  to a StatementBuilder:
+  
++--
+String response = StatementBuilders.insert(Vectors.createVector("myvector", 0.2, 0.8))
+				.into("myspace")
+				.execute(connection);
++--
 ===========================================
 
   {{{./read.html}Next: Read \>}}

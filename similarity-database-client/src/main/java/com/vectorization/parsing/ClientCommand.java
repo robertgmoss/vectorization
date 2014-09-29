@@ -17,9 +17,11 @@
  */
 package com.vectorization.parsing;
 
+import java.io.BufferedReader;
+
 import com.vectorization.driver.Handler;
 
 public interface ClientCommand {
 
-	public String execute(Handler database);
+	public String execute(Handler database, BufferedReader stdIn);
 }

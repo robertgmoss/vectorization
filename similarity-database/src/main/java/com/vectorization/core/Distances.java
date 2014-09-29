@@ -25,8 +25,8 @@ package com.vectorization.core;
  */
 public class Distances {
 
-	public static double structuralEntropicDistance(SSVector x, SSVector y) {
-		if (x.dimensionality() != y.dimensionality()) throw new SSException(
+	public static double structuralEntropicDistance(Vector x, Vector y) {
+		if (x.dimensionality() != y.dimensionality()) throw new VectorizationException(
 				"dimensionality must be equal");
 		double sum = 0.0;
 		for (int i = 0; i < x.dimensionality(); i++) {

@@ -19,19 +19,21 @@ package com.vectorization.core.database;
 
 import java.util.Collection;
 
-import com.vectorization.core.SSVector;
-import com.vectorization.core.collection.SSCollection;
-import com.vectorization.core.collection.VantagePointForest;
+import com.vectorization.core.collection.VPFCollection;
+import com.vectorization.core.collection.VectorCollection;
 
 public class VantagePointForestSpaceFactory implements SpaceFactory{
 
-	public SSCollection<SSVector> createSpace(int dimensionality) {
-		return new VantagePointForest<SSVector>(dimensionality);
+	public VectorCollection createSpace(int dimensionality) {
+		return new VPFCollection(dimensionality);
 	}
 
-	public SSCollection<SSVector> createCompositeTable(int dimensionality,
-			Collection<SSCollection<SSVector>> list) {
-		return new VantagePointForest<SSVector>(dimensionality, list);
+	public VectorCollection createCompositeTable(int dimensionality,
+			Collection<VectorCollection> list) {
+		long before = System.nanoTime();
+		VPFCollection collection = new VPFCollection(dimensionality, list);
+		System.out.println("created vpf [" + (System.nanoTime() - before) + " ns]");
+		return collection;
 	}
 
 }

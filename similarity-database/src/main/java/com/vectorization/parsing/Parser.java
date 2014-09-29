@@ -17,7 +17,7 @@
  */
 package com.vectorization.parsing;
 
-import com.vectorization.core.SSException;
+import com.vectorization.core.VectorizationException;
 import com.vectorization.parsing.Token.Type;
 
 public abstract class Parser<E> {
@@ -35,14 +35,14 @@ public abstract class Parser<E> {
 	}
 
 	public void match(Type tokenType) {
-		if (!getLookAhead().type.equals(tokenType)) { throw new SSException(
+		if (!getLookAhead().type.equals(tokenType)) { throw new VectorizationException(
 				"Syntax error: expected " + tokenType + "; found "
 						+ getLookAhead().type); }
 		consume();
 	}
 
 	public void match(Type tokenType, String keyword) {
-		if (!getLookAhead().val.equals(keyword)) { throw new SSException(
+		if (!getLookAhead().val.equals(keyword)) { throw new VectorizationException(
 				"Syntax error: expected " + keyword + "; found "
 						+ getLookAhead().val); }
 		match(tokenType);

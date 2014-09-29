@@ -17,8 +17,8 @@
  */
 package com.vectorization.core.database;
 
-import com.vectorization.core.SSVector;
-import com.vectorization.core.collection.SSCollection;
+import com.vectorization.core.Vector;
+import com.vectorization.core.collection.VectorCollection;
 
 public interface Database {
 
@@ -28,16 +28,18 @@ public interface Database {
 
 	void drop(String space);
 
-	SSCollection<SSVector> retrieveKnn(String tableName, int k, SSVector prototype);
+	VectorCollection retrieveKnn(String tableName, int k, Vector prototype);
 
 	Database removeAndSave(String table, String... myObjects);
 
-	Database insertAndSave(String table, SSVector... myObjects);
+	Database insertAndSave(String table, Vector... myObjects);
 
-	SSVector show(String tableName, String vectorName);
+	Vector show(String tableName, String vectorName);
 
-	SSCollection<SSVector> show(String tableName);
+	VectorCollection show(String tableName);
 
 	Iterable<String> list();
+
+	String getName();
 
 }

@@ -17,17 +17,18 @@
  */
 package com.vectorization.parsing;
 
-import com.vectorization.parsing.Lexer;
-import com.vectorization.parsing.Token;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.vectorization.parsing.Token.Type;
 
 public class ServerLexer extends Lexer {
 
 	public enum SSType implements Type {
-		NUMBER, NAME, COMMA, DOT, EQUALS, LBRACK, RBRACK, EOF_TYPE
+		NUMBER, NAME,STAR, COMMA, DOT, EQUALS, LBRACK, RBRACK, EOF_TYPE
 	}
 
-	public ServerLexer(String input) {
+	@Inject
+	public ServerLexer(@Assisted String input) {
 		super(input);
 	}
 
@@ -49,6 +50,10 @@ public class ServerLexer extends Lexer {
 
 	private boolean isEquals() {
 		return getLookAhead() == '=';
+	}
+	
+	private boolean isStar(){
+		return getLookAhead() == '*';
 	}
 
 	private boolean isDigit() {
@@ -112,6 +117,10 @@ public class ServerLexer extends Lexer {
 		if (isEquals()) {
 			consume();
 			return new Token(SSType.EQUALS, "=");
+		}
+		if (isStar()) {
+			consume();
+			return new Token(SSType.STAR, "*");
 		}
 		if (isDigit()) return consumeNumber();
 		if (isIdentifierStart()) return consumeName();

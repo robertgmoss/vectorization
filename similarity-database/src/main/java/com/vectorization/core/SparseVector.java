@@ -28,7 +28,7 @@ import java.util.Map;
  * @author Robert Moss
  *
  */
-public class SparseVector extends AbstractVector {
+public abstract class SparseVector extends AbstractVector {
 
 	private static final long serialVersionUID = -6348541795286382173L;
 	private Map<Integer, Double> v = new LinkedHashMap<Integer, Double>();
@@ -55,11 +55,6 @@ public class SparseVector extends AbstractVector {
 	public double get(int i) {
 		if (!v.containsKey(i)) return 0;
 		return v.get(i);
-	}
-
-	public double distance(SSVector other) {
-		return Distances.structuralEntropicDistance(
-				Vectors.createNormalisedVector(this), Vectors.createNormalisedVector(other));
 	}
 
 }

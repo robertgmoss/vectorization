@@ -22,7 +22,7 @@ package com.vectorization.core;
  * @author Robert Moss
  *
  */
-public abstract class AbstractVector implements SSVector {
+public abstract class AbstractVector implements Vector {
 
 	private static final long serialVersionUID = -1714510626632574674L;
 	private String id;
@@ -45,8 +45,8 @@ public abstract class AbstractVector implements SSVector {
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
-		if (!(obj instanceof SSVector)) { return false; }
-		SSVector other = (SSVector) obj;
+		if (!(obj instanceof Vector)) { return false; }
+		Vector other = (Vector) obj;
 		if (this.dimensionality() != other.dimensionality()) return false;
 		for (int i = 0; i < dimensionality(); i++) {
 			if (this.get(i) != other.get(i)) return false;

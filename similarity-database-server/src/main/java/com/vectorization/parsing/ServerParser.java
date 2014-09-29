@@ -20,39 +20,135 @@ package com.vectorization.parsing;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vectorization.core.SSVector;
-import com.vectorization.core.Vectors;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+import com.vectorization.core.Vector;
 import com.vectorization.core.database.Database;
+import com.vectorization.core.vectors.Vectors;
 import com.vectorization.parsing.ServerLexer.SSType;
-import com.vectorization.server.CommandFactory;
-import com.vectorization.server.DefaultCommandFactory;
 import com.vectorization.server.Processor;
-import com.vectorization.server.SecureCommandFactory;
+import com.vectorization.server.command.CommandFactory;
+import com.vectorization.server.security.Security;
 
 public class ServerParser extends Parser<Command> {
 
 	private Processor processor;
-	private CommandFactory factory = new SecureCommandFactory(new DefaultCommandFactory());
+	private CommandFactory factory;
+	private Security security;
 
-	public ServerParser(Processor processor, Lexer l) {
+	@Inject
+	public ServerParser(Security security, CommandFactory factory,
+			@Assisted Processor processor, @Assisted Lexer l) {
 		super(l);
+		this.security = security;
+		this.factory = factory;
 		this.processor = processor;
 	}
 
 	@Override
 	public Command parse() {
 		if (getLookAhead().type.equals(SSType.NAME)) {
-			if (getLookAhead().val.equals("login")) { return login(); }
-			if (getLookAhead().val.equals("use")) { return use(); }
-			if (getLookAhead().val.equals("create")) { return create(); }
-			if (getLookAhead().val.equals("drop")) { return drop(); }
-			if (getLookAhead().val.equals("find")) { return find(); }
-			if (getLookAhead().val.equals("insert")) { return insert(); }
-			if (getLookAhead().val.equals("remove")) { return remove(); }
-			if (getLookAhead().val.equals("list")) { return list(); }
-			if (getLookAhead().val.equals("show")) { return show(); }
+			if (getLookAhead().val.equals("login")) {
+				return login();
+			}
+			if (getLookAhead().val.equals("change")) {
+				return passwd();
+			}
+			if (getLookAhead().val.equals("add")) {
+				return addUser();
+			}
+			if (getLookAhead().val.equals("grant")) {
+				return grant();
+			}
+			if (getLookAhead().val.equals("use")) {
+				return use();
+			}
+			if (getLookAhead().val.equals("create")) {
+				return create();
+			}
+			if (getLookAhead().val.equals("drop")) {
+				return drop();
+			}
+			if (getLookAhead().val.equals("find")) {
+				return find();
+			}
+			if (getLookAhead().val.equals("insert")) {
+				return insert();
+			}
+			if (getLookAhead().val.equals("remove")) {
+				return remove();
+			}
+			if (getLookAhead().val.equals("list")) {
+				return list();
+			}
+			if (getLookAhead().val.equals("show")) {
+				return show();
+			}
 		}
 		return factory.newNullCommand("No such command");
+	}
+
+	private Command passwd() {
+		match(SSType.NAME, "change");
+		match(SSType.NAME, "password");
+		match(SSType.NAME, "to");
+		String password = name();
+		return factory.newChangePasswordCommand(security, password);
+	}
+
+	private Command grant() {
+		match(SSType.NAME, "grant");
+
+		List<String> permissions = new ArrayList<String>();
+		// either a star
+		if (getLookAhead().type.equals(SSType.STAR)) {
+			match(SSType.STAR);
+			permissions.add("*");
+		}
+		// or list of permissions
+		else {
+			String permission = name();
+			permissions.add(permission);
+			while (getLookAhead().type.equals(SSType.COMMA)) {
+				match(SSType.COMMA);
+				permission = name();
+				permissions.add(permission);
+			}
+		}
+		String dbName = "*";
+		String spaceName = "*";
+		if (getLookAhead().val.equals("on")) {
+			match(SSType.NAME, "on");
+
+			if (getLookAhead().type.equals(SSType.STAR)) {
+				match(SSType.STAR);
+			} else {
+				dbName = name();
+			}
+
+			if (getLookAhead().type.equals(SSType.DOT)) {
+				match(SSType.DOT);
+				if (getLookAhead().type.equals(SSType.STAR)) {
+					match(SSType.STAR);
+				} else {
+					spaceName = name();
+				}
+			}
+		}
+		match(SSType.NAME, "to");
+		String username = name();
+		return factory.newGrantCommand(security, permissions, dbName,
+				spaceName, username);
+	}
+
+	private Command addUser() {
+		match(SSType.NAME, "add");
+		match(SSType.NAME, "user");
+		String username = name();
+		match(SSType.NAME, "identified");
+		match(SSType.NAME, "by");
+		String password = name();
+		return factory.newAddUserCommand(security, username, password);
 	}
 
 	private Command login() {
@@ -94,12 +190,12 @@ public class ServerParser extends Parser<Command> {
 		match(SSType.NAME, "insert");
 		String vectorName = name();
 		match(SSType.EQUALS);
-		SSVector v = vector(vectorName);
+		Vector v = vector(vectorName);
 		match(SSType.NAME, "into");
 		String tableName = name();
 		return factory.newInsertCommand(tableName, v);
 	}
-	
+
 	private Command remove() {
 		match(SSType.NAME, "remove");
 		String vectorName = name();
@@ -113,19 +209,20 @@ public class ServerParser extends Parser<Command> {
 		int k = integer();
 		match(SSType.NAME, "nearest");
 		match(SSType.NAME, "to");
-		SSVector v;
+		Vector v;
 		if (getLookAhead().type.equals(SSType.LBRACK)) {
 			v = vector("");
 			match(SSType.NAME, "in");
 			String spaceName = name();
 			return factory.newFindCommand(spaceName, k, v);
-		}else{
+		} else {
 			String querySpaceName = name();
 			match(SSType.DOT);
 			String queryVectorName = name();
 			match(SSType.NAME, "in");
 			String spaceName = name();
-			return factory.newFindVectorCommand(spaceName, k, querySpaceName, queryVectorName);
+			return factory.newFindVectorCommand(spaceName, k, querySpaceName,
+					queryVectorName);
 		}
 	}
 
@@ -163,10 +260,10 @@ public class ServerParser extends Parser<Command> {
 		return real;
 	}
 
-	private SSVector vector(String name) {
+	private Vector vector(String name) {
 		match(SSType.LBRACK);
 		List<Double> vals = new ArrayList<Double>();
-		while(getLookAhead().type.equals(SSType.NUMBER)){
+		while (getLookAhead().type.equals(SSType.NUMBER)) {
 			vals.add(real());
 			if (getLookAhead().type.equals(SSType.COMMA)) {
 				match(SSType.COMMA);

@@ -5,12 +5,12 @@
     <artifactId>vectorization</artifactId>
     <version>0.0.4-SNAPSHOT</version>
   </parent>
-  <artifactId>similarity-database-driver</artifactId>
+  <artifactId>vectorization-driver</artifactId>
   <name>Vectorization Driver</name>
   <dependencies>
   	<dependency>
   		<groupId>com.vectorization</groupId>
-  		<artifactId>similarity-database</artifactId>
+  		<artifactId>vectorization-database</artifactId>
   		<version>0.0.4-SNAPSHOT</version>
   	</dependency>
   </dependencies>

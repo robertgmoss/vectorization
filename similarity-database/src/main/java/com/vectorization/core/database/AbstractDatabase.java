@@ -22,21 +22,21 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.vectorization.core.SSException;
-import com.vectorization.core.SSVector;
-import com.vectorization.core.collection.SSCollection;
-import com.vectorization.core.collection.Space;
+import com.vectorization.core.Vector;
+import com.vectorization.core.VectorizationException;
+import com.vectorization.core.collection.SimpleVectorSpace;
+import com.vectorization.core.collection.VectorCollection;
 
 public abstract class AbstractDatabase implements Database {
 
 	private final String databaseName;
-	private Map<String, SSCollection<SSVector>> data = new LinkedHashMap<String, SSCollection<SSVector>>();
+	private Map<String, VectorCollection> data = new LinkedHashMap<String, VectorCollection>();
 	private SpaceFactory defaultSpaceFactory;
 	private SpaceLoader spaceLoader = new SpaceLoader(this);
 
 	private static void assertNameNotNull(String name, String operation) {
 		if (name == null)
-			throw new SSException("cannot " + operation
+			throw new VectorizationException("cannot " + operation
 					+ ": table name must not be null");
 	}
 
@@ -50,12 +50,15 @@ public abstract class AbstractDatabase implements Database {
 		spaceLoader.loadAll(data, factory);
 	}
 
-	public File getDatabaseDir() {
+
+
+	public File getDatabaseDir() throws IOException {
 		File dir = new File(databaseName);
-		if (!dir.exists())
+		if (!dir.exists()) {
 			dir.mkdir();
+		}
 		if (!dir.isDirectory())
-			throw new SSException("No such database");
+			throw new VectorizationException("No such database");
 		return dir;
 	}
 
@@ -66,7 +69,7 @@ public abstract class AbstractDatabase implements Database {
 	public Database create(String spaceName, int dimensionality,
 			SpaceFactory factory) {
 		assertNameNotNull(spaceName, "create");
-		SSCollection<SSVector> space = factory.createSpace(dimensionality);
+		VectorCollection space = factory.createSpace(dimensionality);
 		insertSpace(spaceName, space);
 		saveSpace(spaceName);
 		return this;
@@ -79,20 +82,27 @@ public abstract class AbstractDatabase implements Database {
 	}
 
 	private void deleteTableFile(String space) {
-		File dir = getDatabaseDir();
-		File[] spaceFiles = dir.listFiles(SpaceLoader.createPartFilter(space));
-		for (File f : spaceFiles) {
-			f.delete();
+		try {
+			File dir = getDatabaseDir();
+			File[] spaceFiles = dir.listFiles(SpaceLoader
+					.createPartFilter(space));
+			for (File f : spaceFiles) {
+				f.delete();
+			}
+		} catch (IOException e) {
+			throw new VectorizationException(e);
 		}
 	}
 
-	public SSCollection<SSVector> retrieveKnn(String spaceName, int k,
-			SSVector prototype) {
+	public VectorCollection retrieveKnn(String spaceName, int k,
+			Vector prototype) {
+		long before = System.nanoTime();
 		spaceLoader.load(data, spaceName, getDefaultSpaceFactory());
+		System.out.println("loaded space [" + (System.nanoTime() - before) + " ns]");
 		if (!data.containsKey(spaceName))
-			throw new SSException("No such table: " + spaceName);
+			throw new VectorizationException("No such table: " + spaceName);
 		if (data.get(spaceName).dimensionality() != prototype.dimensionality()) {
-			throw new SSException(
+			throw new VectorizationException(
 					"Cannot search using element with dimensionality: "
 							+ prototype.dimensionality()
 							+ " in collection with dimensionality:"
@@ -111,7 +121,7 @@ public abstract class AbstractDatabase implements Database {
 		return this;
 	}
 
-	public Database insertAndSave(String space, SSVector... vectors) {
+	public Database insertAndSave(String space, Vector... vectors) {
 		insert(space, vectors);
 		saveSpace(space);
 		return this;
@@ -119,41 +129,49 @@ public abstract class AbstractDatabase implements Database {
 
 	private void remove(String space, String... vectorIds) {
 		if (!data.containsKey(space))
-			throw new SSException("No such table: " + space);
+			throw new VectorizationException("No such table: " + space);
 		data.get(space).removeAll(vectorIds);
 	}
 
-	private void insert(String space, SSVector... vectors) {
+	private void insert(String space, Vector... vectors) {
 		if (!data.containsKey(space))
-			throw new SSException("No such table: " + space);
+			throw new VectorizationException("No such table: " + space);
 		data.get(space).insertAll(vectors);
 	}
 
-	public void insertSpace(String spaceName, SSCollection<SSVector> space) {
+	public void insertSpace(String spaceName, VectorCollection space) {
+		long before = System.nanoTime();
 		data.put(spaceName, space);
+		System.out.println("inserted space [" + (System.nanoTime() - before) + " ns]");
 	}
 
 	private void saveSpace(String space) {
 		try {
+			//System.out.print("saving...");
 			data.get(space).save(databaseName + File.separator + space);
+			//System.out.println("done");
 		} catch (IOException e) {
-			throw new SSException(e);
+			throw new VectorizationException(e);
 		}
 	}
 
-	public SSVector show(String spaceName, String vectorName) {
+	public Vector show(String spaceName, String vectorName) {
 		return show(spaceName).get(vectorName);
 	}
 
-	public SSCollection<SSVector> show(String spaceName) {
+	public VectorCollection show(String spaceName) {
 		spaceLoader.load(data, spaceName, getDefaultSpaceFactory());
 		if (!data.containsKey(spaceName))
-			return new Space<SSVector>(0);
+			return new SimpleVectorSpace(0);
 		return data.get(spaceName);
 	}
 
 	public Iterable<String> list() {
 		return data.keySet();
+	}
+	
+	public String getName() {
+		return databaseName;
 	}
 
 	@Override
@@ -164,5 +182,4 @@ public abstract class AbstractDatabase implements Database {
 		sb.append("\"");
 		return sb.toString();
 	}
-
 }

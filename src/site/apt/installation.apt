@@ -7,20 +7,43 @@ Installation
 
 ** Running the Vectorization Server
   
-  to run the server as a background task enter:
+  to run the server:
   
 +---------------------------------------
-java -jar vectorization-server-XXX.jar &
+usage: java -jar vectorization-server-XXX.jar [--help] [-P
+       <arg>] [-V]
+    --help         Print this message
+ -P,--port <arg>   Port number to use for connection
+ -V,--version      Output version information and exit.
 +---------------------------------------
 
-  replacing XXX with the version number you have downloaded
+  replacing XXX with the version number you have downloaded.
+  See {{{/installation/getting-started.html}Getting Started}}
+  for instructions for how to use the Vectorization Server.
 
 ** Running the Vectorization Client
 
-  to run the client enter:
+  to run the client:
   
 +-------------------------------------
-java -jar vectorization-client-XXX.jar
+usage: java -jar vectorization-client-XXX.jar [-D <arg>] [-h
+       <arg>] [--help] [-P <arg>] [-p <arg>] [-u <arg>] [-V]
+ -D,--database <arg>   Database to use.
+ -h,--host <arg>       Connect to host.
+    --help             Print this message
+ -P,--port <arg>       Port number to use for connection
+ -p,--password <arg>   Password to use when connecting to server.  If
+                       password is not given it's asked from the tty.
+ -u,--user <arg>       User for login if not current user.
+ -V,--version          Output version information and exit.
 +-------------------------------------
 
-  replacing XXX with the version number you have downloaded
+  replacing XXX with the version number you have downloaded.
+  See {{{/installation/getting-started.html}Getting Started}}
+  for instructions for how to use the Vectorization Client.
+  
+** Developing software with the Vectorization Java API
+
+  Add the vectorization-driver to your classpath.
+  See {{{/installation/getting-started.html}Getting Started}}
+  for instructions for how to use the Vectorization Java API.

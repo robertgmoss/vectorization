@@ -23,4 +23,6 @@ public interface Command {
 
 	String execute(Database database);
 
+	String getPermissionLevel();
+
 }

@@ -3,7 +3,7 @@
   <parent>
     <artifactId>vectorization</artifactId>
     <groupId>com.vectorization</groupId>
-    <version>0.0.3</version>
+    <version>0.0.4-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>vectorization-server</artifactId>
@@ -31,5 +31,32 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>staging</id>
+      <build>
+        <resources>
+          <resource>
+            <filtering>true</filtering>
+            <directory>/home/rgm/workspace/Java/Vectorization/vectorization/similarity-database-server/src/main/resources</directory>
+          </resource>
+        </resources>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.derby</groupId>
+          <artifactId>derby</artifactId>
+          <version>10.11.1.1</version>
+          <scope>compile</scope>
+        </dependency>
+      </dependencies>
+      <properties>
+        <jdbc.url>jdbc:derby://localhost:1527/shiro_schema</jdbc.url>
+        <jdbc.passwd>APP</jdbc.passwd>
+        <jdbc.driver>org.apache.derby.jdbc.EmbeddedDriver</jdbc.driver>
+        <jdbc.user>APP</jdbc.user>
+      </properties>
+    </profile>
+  </profiles>
 </project>
 

@@ -17,6 +17,8 @@
  */
 package com.vectorization.client;
 
+import java.io.BufferedReader;
+
 import com.vectorization.driver.AbstractHandler;
 import com.vectorization.driver.Handler;
 import com.vectorization.parsing.ClientCommand;
@@ -26,21 +28,25 @@ import com.vectorization.parsing.Parser;
 
 public class LocalHandler extends AbstractHandler {
 
-	public LocalHandler(Handler handler) {
+	private BufferedReader stdIn;
+
+	public LocalHandler(BufferedReader stdIn, Handler handler) {
 		super(handler);
+		this.stdIn = stdIn;
+		
 	}
 
 	@Override
 	public String processRequest(final String command) {
 		ClientCommand forward = new ClientCommand() {
 			
-			public String execute(Handler h) {
+			public String execute(Handler h, BufferedReader br) {
 				return forward(command);
 			}
 		};
 		
 		Parser<ClientCommand> p = new ClientParser(new ClientLexer(command), forward);
-		return p.parse().execute(this);
+		return p.parse().execute(this, stdIn);
 	}
 
 }

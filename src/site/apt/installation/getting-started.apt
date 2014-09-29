@@ -1,0 +1,57 @@
+Getting Started
+
+  If it is not yet running, be sure to start the vectorization server. 
+  (See {{{/installation.html}Installation}} for details.)
+  
+*  Logging in
+
+  To log in with the vectorization client, you can set the username and 
+  password as a command line option.  Alternatively, you can authenticate
+  once a connection has been made to the server using the following command:
+  (A default user is created when the server is first run with username 
+  <admin> with password <admin>.)
+
++---------------------------------------
+login <username> with <password>
++---------------------------------------
+
+  You can also use this command to switch users once logged in.
+  
+* Using the Java API
+
+** Establishing a connection
+
+  Applications start with an instance of Vectorization, which contains a factory method
+  for establishing a connection.  This default implementation provides a connection
+  to <localhost> on port <4567>; to change this it is best to subclass Vectorization
+  and override the factory method, eg:
+  
++--
+public class App extends Vectorization{
+
+	@Override
+	public Connection getConnection(){
+		return new Connection(<address>, <port>);
+	}
+}
++--
+
+  This allows us to write applications in the following way:
+ 
++--
+	App application = new App();
+	Connection connection = application.getConnection();
+	connection.connect();
++--
+
+** Writing statements
+
+  Once a connection has been established, you can write statements to control
+  or query the Vectorization database.  This can either be entered as a String:  
+  
++--
+	Statement statement = connection.createStatement();
+	String result = statement.execute("login admin with admin");
++--
+
+  or you can use the StatementBuilders as described in the {{{/crud/tutorials.html}CRUD Tutorials}}

@@ -17,9 +17,9 @@
  */
 package com.vectorization.driver;
 
-import com.vectorization.core.SSVector;
-import com.vectorization.core.collection.SSCollection;
-import com.vectorization.core.collection.Space;
+import com.vectorization.core.VectorizationException;
+import com.vectorization.core.collection.SimpleVectorSpace;
+import com.vectorization.core.collection.VectorCollection;
 
 public class Statement {
 	
@@ -34,18 +34,22 @@ public class Statement {
 	 * @param query
 	 * @return
 	 */
-	public SSCollection<SSVector> executeQuery(String query){
+	public VectorCollection executeQuery(String query){
 		String result = execute(query);
-		System.out.println(result);
-		// do something with result
-		return new Space<SSVector>(0);
+		if(result.equals("") || result.equals("empty")) return new SimpleVectorSpace(0);
+		// result should be a list of vectors
+		try{
+			return SimpleVectorSpace.parseSpace(result);
+		}catch(Exception e){
+			throw new VectorizationException("Query does not return a VectorCollection: " + result);
+		}
 	}
 	
 	public String execute(String statement){
 		return handler.processRequest(statement);
 	}
 	
-	public SSCollection<SSVector> getResult(){
+	public VectorCollection getResult(){
 		return null;
 	}
 

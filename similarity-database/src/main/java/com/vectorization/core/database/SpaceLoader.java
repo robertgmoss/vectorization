@@ -20,6 +20,7 @@ package com.vectorization.core.database;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,10 +29,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
-import com.vectorization.core.SSException;
-import com.vectorization.core.SSVector;
-import com.vectorization.core.collection.SSCollection;
+import com.vectorization.core.VectorizationException;
+import com.vectorization.core.collection.VectorCollection;
 
 public class SpaceLoader {
 
@@ -40,7 +41,7 @@ public class SpaceLoader {
 	public SpaceLoader(AbstractDatabase database) {
 		this.database = database;
 	}
-	
+
 	public static File[] getDbFiles(File dir) {
 		return getDbFiles(dir, new FilenameFilter() {
 
@@ -49,29 +50,36 @@ public class SpaceLoader {
 			}
 		});
 	}
+	
+	public static Properties getDbProperties(File dir) throws IOException{
+		Properties props = new Properties();
+		props.load(new FileReader(new File(dir, "db.properties")));
+		return props;
+	}
 
 	public static File[] getDbFiles(File dir, FilenameFilter filter) {
 		return dir.listFiles(filter);
 	}
 
-	public void loadAll(Map<String, SSCollection<SSVector>> data, SpaceFactory factory) {
+	public void loadAll(Map<String, VectorCollection> data,
+			SpaceFactory factory) {
 		try {
-			File[] tables = getDbFiles(database.getDatabaseDir());
+			File databaseDir = database.getDatabaseDir();
+			File[] tables = getDbFiles(databaseDir);
 			load(data, tables, factory);
 		} catch (Exception e) {
-			throw new SSException(e);
+			throw new VectorizationException(e);
 		}
 	}
 
-	public void load(Map<String, SSCollection<SSVector>> data, String space,
+	public void load(Map<String, VectorCollection> data, String space,
 			SpaceFactory factory) {
-
-		File[] tables = getDbFiles(database.getDatabaseDir(),
-				createPartFilter(space));
 		try {
+			File[] tables = getDbFiles(database.getDatabaseDir(),
+					createPartFilter(space));
 			load(data, tables, factory);
 		} catch (Exception e) {
-			throw new SSException(e);
+			throw new VectorizationException(e);
 		}
 	}
 
@@ -84,27 +92,29 @@ public class SpaceLoader {
 		};
 	}
 
-	@SuppressWarnings("unchecked")
-	private SSCollection<SSVector> load(File file)
+	private VectorCollection load(File file)
 			throws FileNotFoundException, IOException, ClassNotFoundException {
 		ObjectInputStream ois = null;
 		try {
 			ois = new ObjectInputStream(new FileInputStream(file));
-			return (SSCollection<SSVector>) ois.readObject();
+			long before = System.nanoTime();
+			VectorCollection collection = (VectorCollection) ois.readObject();
+			System.out.println("read object [" + (System.nanoTime() - before) + " ns]");
+			return collection;
 		} finally {
 			if (ois != null)
 				ois.close();
 		}
 	}
 
-	private void load(Map<String, SSCollection<SSVector>> data, File[] tables,
-			SpaceFactory factory) throws FileNotFoundException,
+	private void load(Map<String, VectorCollection> data,
+			File[] tables, SpaceFactory factory) throws FileNotFoundException,
 			ClassNotFoundException, IOException {
-		Map<String, List<SSCollection<SSVector>>> partLists = new LinkedHashMap<String, List<SSCollection<SSVector>>>();
+		Map<String, List<VectorCollection>> partLists = new LinkedHashMap<String, List<VectorCollection>>();
 
 		for (File f : tables) {
 			String filename = f.getName();
-			SSCollection<SSVector> table = load(f);
+			VectorCollection table = load(f);
 			String tableName = removeSuffix(filename);
 			if (!tableName.contains(".part")) {
 				database.insertSpace(tableName, table);
@@ -113,17 +123,18 @@ public class SpaceLoader {
 				addToPartList(partLists, table, tableName);
 			}
 		}
+		long before = System.nanoTime();
 		flattenPartLists(data, partLists, factory);
-
+		System.out.println("flattened part lists [" + (System.nanoTime() - before) + " ns]");
 	}
 
 	private void addToPartList(
-			Map<String, List<SSCollection<SSVector>>> partLists,
-			SSCollection<SSVector> table, String tableName) {
+			Map<String, List<VectorCollection>> partLists,
+			VectorCollection table, String tableName) {
 		if (!partLists.containsKey(tableName)) {
-			partLists.put(tableName, new ArrayList<SSCollection<SSVector>>());
+			partLists.put(tableName, new ArrayList<VectorCollection>());
 		}
-		List<SSCollection<SSVector>> parts = partLists.get(tableName);
+		List<VectorCollection> parts = partLists.get(tableName);
 		parts.add(table);
 	}
 
@@ -131,10 +142,10 @@ public class SpaceLoader {
 		return filename.substring(0, filename.lastIndexOf('.'));
 	}
 
-	private void flattenPartLists(Map<String, SSCollection<SSVector>> data,
-			Map<String, List<SSCollection<SSVector>>> partLists,
+	private void flattenPartLists(Map<String, VectorCollection> data,
+			Map<String, List<VectorCollection>> partLists,
 			SpaceFactory factory) {
-		for (Entry<String, List<SSCollection<SSVector>>> parts : partLists
+		for (Entry<String, List<VectorCollection>> parts : partLists
 				.entrySet()) {
 			int dimensionality = parts.getValue().get(0).dimensionality();
 			database.insertSpace(

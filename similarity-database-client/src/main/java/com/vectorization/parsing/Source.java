@@ -32,7 +32,7 @@ public class Source implements ClientCommand {
 		this.path = path;
 	}
 
-	public String execute(Handler h) {
+	public String execute(Handler h, BufferedReader stdIn) {
 		try{
 			StringBuilder sb = new StringBuilder();
 			BufferedReader br = IO.createBufferedReader(new FileInputStream(path));

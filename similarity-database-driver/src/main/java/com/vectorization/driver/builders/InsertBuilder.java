@@ -17,14 +17,13 @@
  */
 package com.vectorization.driver.builders;
 
-public class InsertBuilder{
-	private String statement;
+public class InsertBuilder extends StatementBuilder{
 	
 	public InsertBuilder(String statement) {
-		this.statement = statement;
+		super(statement);
 	}
 	
 	public Builder into(String space){
-		return new Builder(statement + " into " + space);
+		return new Builder(getStatement() + " into " + space);
 	}
 }

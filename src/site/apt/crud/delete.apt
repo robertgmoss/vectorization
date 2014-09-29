@@ -9,7 +9,14 @@ drop <spaceid>
   
 +--------------------------
 drop myspace
-+--------------------------  
++-------------------------- 
+
+  Using the Java driver api, you can also do this programmatically by passing a Connection
+  to a StatementBuilder:
+  
++--
+String response = StatementBuilders.drop("myspace").execute(connection);
++-- 
 
 * Removing a vector from the Vector Space
 
@@ -22,6 +29,14 @@ remove <vectorid> from <spaceid>
 remove myvector from myspace
 +-------------------------------
 
+  Using the Java driver api, you can also do this programmatically by passing a Connection
+  to a StatementBuilder:
+  
++--
+String response = StatementBuilders.remove("myvector")
+				.from("myspace")
+				.execute(connection);
++--
 =====================================================================
 
   {{{./update.html}\< Previous: Update}}

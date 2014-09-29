@@ -19,85 +19,135 @@ package com.vectorization.client;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
 
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.vectorization.driver.Vectorization;
 
-public class Application extends Vectorization{
-	
+public class Application extends Vectorization {
+
+	public static final String VERSION = "0.0.4-SNAPSHOT";
+
+	private CommandLineParser commandLineParser;
+	private ClientConnection client;
+
+	public static void printVersion() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("vectorization Version " + VERSION + " for JVM.\n");
+		sb.append("Copyright (c) 2014, Robert Moss. All rights reserved.\n");
+		System.out.println(sb);
+	}
+
+	@Inject
+	public Application(CommandLineParser command1Lineparser) {
+		this.commandLineParser = command1Lineparser;
+		this.client = getConnection();
+	}
+
 	@Override
 	public ClientConnection getConnection() {
 		return new ClientConnection();
 	}
-	
-	private static Options createOptions(){
+
+	private static Options createOptions() {
 		Options options = new Options();
-		options.addOption("D", "database",  true,  "Database to use.");
-		options.addOption("h", "host",      true,  "Connect to host.");
-		Option passwordOption = 
-			   new Option("p", "password",  true,  "Password to use when connecting "
-			   		                             + "to server.  If password is not "
-			   		                             + "given it's asked from the tty.");
+		options.addOption("D", "database", true, "Database to use.");
+		options.addOption("h", "host", true, "Connect to host.");
+		OptionBuilder.withLongOpt("help");
+		OptionBuilder.withDescription("Print this message");
+		Option help = OptionBuilder.create();
+		options.addOption(help);
+		Option passwordOption = new Option("p", "password", true,
+				"Password to use when connecting "
+						+ "to server.  If password is not "
+						+ "given it's asked from the tty.");
 		passwordOption.setOptionalArg(true);
 		options.addOption(passwordOption);
-		options.addOption("P", "port",      true,  "Port number to use for connection");
-		options.addOption("u", "user",      true,  "User for login if not current user.");
-		options.addOption("V", "version",   false, "Output version information and exit.");
+		options.addOption("P", "port", true,
+				"Port number to use for connection");
+		options.addOption("u", "user", true,
+				"User for login if not current user.");
+		options.addOption("V", "version", false,
+				"Output version information and exit.");
 		return options;
 	}
-	
-	public static void main(String[] args) {
-		CommandLineParser parser = new PosixParser();
-		Options options = createOptions();
-		
-		try {
-			CommandLine line = parser.parse(options, args);
-			if (line.hasOption("V")) {
-				printVersion();
-				System.exit(0);
-			}
 
-			Application app = new Application();
-			ClientConnection client = app.getConnection();
-			String host = "localhost";
+	private void printHelpAndExit(Options options) {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("java -jar vectorization-client-" + VERSION
+				+ ".jar", options, true);
+		System.exit(0);
+	}
+
+	private void printVersionAndExit() {
+		printVersion();
+		System.exit(0);
+	}
+	
+	private void connect(String host, int port){
+		client.setAddress(host);
+		client.setPort(port);
+		client.connect();
+	}
+	
+	private void login(String username, String password){
+		if (password == null) {
+			password = client.promptForPassword();
+		}
+		client.login(username, password);
+	}
+
+	public void run(String[] args) {
+		Options options = createOptions();
+		try {
+			CommandLine line = commandLineParser.parse(options, args);
+			if (line.hasOption("V")) {
+				printVersionAndExit();
+			}
+			
+			if (line.hasOption("help")) {
+				printHelpAndExit(options);
+			}	
+			
+			String host = DEFAULT_ADDRESS;
 			if (line.hasOption("h")) {
 				host = line.getOptionValue("h");
 			}
-			client.setAddress(host);
-			int port = 4567;
-			if(line.hasOption("P")){
+			
+			int port = DEFAULT_PORT;
+			if (line.hasOption("P")) {
 				port = Integer.parseInt(line.getOptionValue("P"));
 			}
-			client.setPort(port);
-			client.connect();
+			connect(host, port);
+			
 			if (line.hasOption("u") && line.hasOption("p")) {
 				String username = line.getOptionValue("u");
 				String password = line.getOptionValue("p");
-				if (password == null) {
-					password = client.promptForPassword();
-				}
-				client.login(username, password);
+				login(username, password);
 			}
-			
-			if(line.hasOption("D")){
+	
+			if (line.hasOption("D")) {
 				client.useDatabase(line.getOptionValue("D"));
 			}
-
+	
 			client.startPrompt();
 			client.close();
+	
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void printVersion() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("vectorization Version 0.0.3 for JVM.\n");
-		sb.append("Copyright (c) 2014, Robert Moss. All rights reserved.\n");
-		System.out.println(sb);
+	public static void main(String[] args) {
+		Injector injector = Guice.createInjector(new AppInjecter());
+		Application app = injector.getInstance(Application.class);
+		app.run(args);
 	}
 
 }

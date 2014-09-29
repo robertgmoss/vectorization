@@ -34,8 +34,13 @@ public class ClientParser extends Parser<ClientCommand>{
 			String val = getLookAhead().val;
 			if(val.equals("source")){ return source(); }
 			if(val.equals("quit") || val.equals("exit")){ return exit();}
+			if(val.equals("passwd")){return passwd();}
 		}
 		return defaultCommand;
+	}
+
+	private ClientCommand passwd() {
+		return new ChangePassword();
 	}
 
 	private ClientCommand exit() {

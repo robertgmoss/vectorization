@@ -24,12 +24,12 @@ package com.vectorization.core;
  * @author Robert Moss
  *
  */
-public class NormalisedVector extends SSVectorDecorator {
+public class NormalisedVector extends VectorDecorator {
 
 	private static final long serialVersionUID = -7461934269703184566L;
 	private double sum = 0.0;
 
-	public NormalisedVector(SSVector vector) {
+	public NormalisedVector(Vector vector) {
 		super(vector);
 		for (int i = 0; i < dimensionality(); i++) {
 			sum += super.get(i);
@@ -41,7 +41,7 @@ public class NormalisedVector extends SSVectorDecorator {
 		return super.get(i) / sum;
 	}
 
-	public double distance(SSVector other) {
+	public double distance(Vector other) {
 		return super.distance(other);
 	}
 

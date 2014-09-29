@@ -11,6 +11,13 @@ Read Operations
 list
 +---
   The list command will display all of the Vector Spaces stored in the current database.
+  
+    Using the Java driver api, you can also do this programmatically by passing a Connection
+  to a StatementBuilder:
+  
++--
+String response = StatementBuilders.list().execute(connection);
++--
 
 * Showing the contents of a Vector Space
 
@@ -29,6 +36,18 @@ show myspace
 show myspace.myvector
 +--------------------------
 
+  Using the Java driver api, you can also do this programmatically by passing a Connection
+  to a StatementBuilder:
+  
++--
+VectorCollection<Vector> result = StatementBuilders.show("myspace").execute(connection);
++--
+  or
+  
++--
+VectorCollection<Vector> result = StatementBuilders.show("myspace", "myvector").execute(connection);
++--
+
 * Querying a Vector Space
 
 +--------------------------------------------------------------------
@@ -45,6 +64,24 @@ find 10 nearest to [0.5, 0.5] in myspace
 +--------------------------------------------------------------------
 find 100 nearest to anotherspace.anothervector in myspace
 +--------------------------------------------------------------------
+
+  Using the Java driver api, you can also do this programmatically by passing a Connection
+  to a StatementBuilder:
+ 
++-- 
+  VectorCollection<Vector> result = StatementBuilders.find(10)
+				.nearestTo(Vectors.createVector("query", 0.5, 0.5))
+				.in("myspace")
+				.execute(connection);
++--
+  or
+  
++--
+VectorCollection<Vector> result = StatementBuilders.find(10)
+				.nearestTo("anotherspace.anothervector")
+				.in("myspace")
+				.execute(connection);
++--
 =====================================================================
 
 

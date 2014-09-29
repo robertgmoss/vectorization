@@ -20,7 +20,7 @@ package com.vectorization.util;
 import java.util.Collections;
 import java.util.List;
 
-import com.vectorization.core.SSVector;
+import com.vectorization.core.Metric;
 
 /**
  * Provides methods for manipulating a collection of vectors
@@ -30,7 +30,7 @@ import com.vectorization.core.SSVector;
  */
 public class Partition {
 
-	public static <P extends SSVector> int select(P p, P[] points, int i, int j) {
+	public static <P extends Metric<P>> int select(P p, P[] points, int i, int j) {
 		int mid = i + (j - i) / 2;
 		int m = -1;
 		while (i < j) {
@@ -42,7 +42,7 @@ public class Partition {
 		return m;
 	}
 	
-	public static <P extends SSVector> int select(P p, List<P> points, int i, int j) {
+	public static <P extends Metric<P>> int select(P p, List<P> points, int i, int j) {
 		int mid = i + (j - i) / 2;
 		int m = -1;
 		while (i <= j) {
@@ -54,7 +54,7 @@ public class Partition {
 		return m;
 	}
 
-	private static <P extends SSVector> int partition(P p, P[] points, int i,
+	private static <P extends Metric<P>> int partition(P p, P[] points, int i,
 			int j) {
 		if (i > j) return -1; // 0 elements
 		if (i == j) return i; // one element
@@ -71,7 +71,7 @@ public class Partition {
 		return l;
 	}
 	
-	private static <P extends SSVector> int partition(P p, List<P> points, int i,
+	private static <P extends Metric<P>> int partition(P p, List<P> points, int i,
 			int j) {
 		if (i > j) return -1; // 0 elements
 		if (i == j) return i; // one element
@@ -88,13 +88,13 @@ public class Partition {
 		return l;
 	}
 
-	private static <P extends SSVector> void swap(P[] points, int l, int r) {
+	private static <P extends Metric<P>> void swap(P[] points, int l, int r) {
 		P t = points[r];
 		points[r] = points[l];
 		points[l] = t;
 	}
 	
-	private static <P extends SSVector> void swap(List<P> points, int l, int r) {
+	private static <P extends Metric<P>> void swap(List<P> points, int l, int r) {
 		Collections.swap(points, l, r);
 	}
 

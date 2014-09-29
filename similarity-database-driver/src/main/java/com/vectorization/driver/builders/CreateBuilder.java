@@ -17,15 +17,13 @@
  */
 package com.vectorization.driver.builders;
 
-public class CreateBuilder {
-	
-	private String statement;
+public class CreateBuilder extends StatementBuilder{
 
 	public CreateBuilder(String statement) {
-		this.statement = statement;
+		super(statement);
 	}
 	
 	public Builder withDimensionality(int n){
-		return new Builder(statement + " with dimensionality " + n);
+		return new Builder(getStatement() + " with dimensionality " + n);
 	}
 }

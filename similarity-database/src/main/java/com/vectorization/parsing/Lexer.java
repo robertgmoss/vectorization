@@ -17,7 +17,7 @@
  */
 package com.vectorization.parsing;
 
-import com.vectorization.core.SSException;
+import com.vectorization.core.VectorizationException;
 
 public abstract class Lexer {
 
@@ -41,7 +41,7 @@ public abstract class Lexer {
 
 	public void match(char c) {
 		if (c == getLookAhead()) consume();
-		else throw new SSException("Expected " + c + " found " + getLookAhead());
+		else throw new VectorizationException("Expected " + c + " found " + getLookAhead());
 	}
 
 	public char getLookAhead() {

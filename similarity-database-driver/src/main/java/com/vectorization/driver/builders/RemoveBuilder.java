@@ -17,14 +17,13 @@
  */
 package com.vectorization.driver.builders;
 
-public class RemoveBuilder{
-	private String statement;
+public class RemoveBuilder extends StatementBuilder{
 	
 	public RemoveBuilder(String statement) {
-		this.statement = statement;
+		super(statement);
 	}
 	
 	public Builder from(String space){
-		return new Builder(statement + " from " + space);
+		return new Builder(getStatement() + " from " + space);
 	}
 }
