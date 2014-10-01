@@ -17,14 +17,14 @@
  */
 package com.vectorization.core.database;
 
-import java.util.Collection;
+import java.io.File;
 
-import com.vectorization.core.collection.VectorCollection;
+import com.vectorization.core.collection.FileCompositeCollection;
 
 public interface SpaceFactory {
 
-	VectorCollection createSpace(int dimensionality);
-
-	VectorCollection createCompositeTable(int dimensionality, 
-			Collection<VectorCollection> list);
+	FileCompositeCollection createSpace(int dimensionality, String database,
+			String name);
+	
+	FileCompositeCollection createSpace(int dimensionality,String database, String name, File... files);
 }

@@ -18,7 +18,6 @@
 package com.vectorization.core.database;
 
 import com.vectorization.core.Vector;
-import com.vectorization.core.collection.VectorCollection;
 
 public interface Database {
 
@@ -28,7 +27,7 @@ public interface Database {
 
 	void drop(String space);
 
-	VectorCollection retrieveKnn(String tableName, int k, Vector prototype);
+	Iterable<Vector> retrieveKnn(String tableName, int k, Vector prototype);
 
 	Database removeAndSave(String table, String... myObjects);
 
@@ -36,7 +35,7 @@ public interface Database {
 
 	Vector show(String tableName, String vectorName);
 
-	VectorCollection show(String tableName);
+	Iterable<Vector> show(String tableName);
 
 	Iterable<String> list();
 

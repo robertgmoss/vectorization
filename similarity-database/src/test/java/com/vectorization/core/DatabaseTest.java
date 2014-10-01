@@ -19,13 +19,12 @@ package com.vectorization.core;
 
 import java.util.Arrays;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.vectorization.core.collection.SimpleVectorSpace;
-import com.vectorization.core.collection.VectorCollection;
+import com.vectorization.core.collection.VectorSpace;
 import com.vectorization.core.database.Database;
 import com.vectorization.core.database.DatabaseImpl;
 import com.vectorization.core.vectors.Vectors;
@@ -37,51 +36,57 @@ public class DatabaseTest {
 	@Before
 	public void setUp() {
 		database = new DatabaseImpl("Test");
-//		database.drop("large");
-//		database.create("test", 2);
-//		database.insertAndSave("test",
-//				Vectors.createNormalisedVector("1", 0.8, 0.5),
-//				Vectors.createNormalisedVector("2", 0.25, 0.75));
+		// database.drop("large");
+		database.create("test", 2);
+		database.insertAndSave("test",
+				Vectors.createNormalisedVector("1", 0.8, 0.5),
+				Vectors.createNormalisedVector("2", 0.25, 0.75));
 	}
 
-	@After
+	// @Test
+	public void empty() {
+	}
+
+	// @After
 	public void tearDown() {
 		database.drop("test");
 		database.drop("mydata");
 		database.drop("large");
 	}
 
-	//@Test
+	// @Test
 	public void testRetrieve() {
-		VectorCollection expected = new SimpleVectorSpace(2, Arrays.asList(
+		VectorSpace expected = new SimpleVectorSpace(2, Arrays.asList(
 				Vectors.createNormalisedVector("1", 0.8, 0.5),
 				Vectors.createNormalisedVector("2", 0.25, 0.75)));
 		int k = expected.size();
 		Vector prototype = Vectors.createNormalisedVector("", 1.0, 0.0);
-		VectorCollection result = database.retrieveKnn("test", k,
-				prototype);
-		for (Vector o : expected) {
-			Assert.assertTrue(result.contains(o));
+		Iterable<Vector> result = database.retrieveKnn("test", k, prototype);
+
+		System.out.println(result);
+		for (Vector o : result) {
+			Assert.assertTrue(expected.contains(o));
 		}
 	}
 
 	@Test
 	public void testRetrieveFromLargeSpace() {
 		database.create("large", 2);
-		Vector[] vs = new Vector[320000];
-		for (int i = 0; i < vs.length; i++) {
-			vs[i] = Vectors.createNormalisedVector("" + i, Math.random(),
-					Math.random());
+		for (int it = 0; it < 3; it++) {
+			System.out.println(it);
+			Vector[] vs = new Vector[100000];
+			for (int i = 0; i < vs.length; i++) {
+				vs[i] = Vectors.createNormalisedVector(it+"." + i, Math.random(),
+						Math.random());
+			}
+			database.insertAndSave("large", vs);
 		}
-		database.insertAndSave("large", vs);
-		Vector q = Vectors.createNormalisedVector("q", Math.random(), Math.random());
+		Vector q = Vectors.createNormalisedVector("q", Math.random(),
+				Math.random());
 		System.out.println("searching for neighbours of " + q);
-		System.out.println(database.retrieveKnn(
-				"large",
-				5,
-				q));
-//		System.out.println();
-//		System.out.println("showing whole space");
+		System.out.println(database.retrieveKnn("large", 50, q));
+		// System.out.println();
+		// System.out.println("showing whole space");
 //		System.out.println(SimpleVectorSpace.parseSpace(database.show("large").toString()));
 	}
 }

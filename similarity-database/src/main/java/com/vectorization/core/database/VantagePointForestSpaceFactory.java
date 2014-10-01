@@ -17,22 +17,21 @@
  */
 package com.vectorization.core.database;
 
-import java.util.Collection;
+import java.io.File;
+import java.util.Arrays;
 
+import com.vectorization.core.collection.FileCompositeCollection;
 import com.vectorization.core.collection.VPFCollection;
-import com.vectorization.core.collection.VectorCollection;
 
 public class VantagePointForestSpaceFactory implements SpaceFactory{
 
-	public VectorCollection createSpace(int dimensionality) {
-		return new VPFCollection(dimensionality);
+	public FileCompositeCollection createSpace(int dimensionality,String database, String name) {
+		FileCompositeCollection collection = new VPFCollection(dimensionality,database, name);
+		return collection;
 	}
 
-	public VectorCollection createCompositeTable(int dimensionality,
-			Collection<VectorCollection> list) {
-		long before = System.nanoTime();
-		VPFCollection collection = new VPFCollection(dimensionality, list);
-		System.out.println("created vpf [" + (System.nanoTime() - before) + " ns]");
+	public FileCompositeCollection createSpace(int dimensionality, String database,String name, File... files) {
+		FileCompositeCollection collection = new VPFCollection(dimensionality,database, name, Arrays.asList(files));
 		return collection;
 	}
 

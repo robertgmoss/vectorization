@@ -18,7 +18,6 @@
 package com.vectorization.core.collection;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -35,7 +34,7 @@ import com.vectorization.core.vectors.Vectors;
  *
  * @param <E>
  */
-public class SimpleVectorSpace extends AbstractVectorCollection {
+public class SimpleVectorSpace extends AbstractVectorSpace {
 
 	private static final long serialVersionUID = 2751516171619962956L;
 	
@@ -59,19 +58,16 @@ public class SimpleVectorSpace extends AbstractVectorCollection {
 		super(dimensionality);
 	}
 
-	public SimpleVectorSpace(int dimensionality, Collection<Vector> collection) {
+	public SimpleVectorSpace(int dimensionality, Iterable<Vector> collection) {
 		super(dimensionality);
-//		for (Vector e : collection) {
-//			insert(e);
-//		}
-		insertAll(new ArrayList<Vector>(collection));
+		insertAll(collection);
 	}
 
-	public VectorCollection retrieveKnn(int k, final Vector prototype) {
+	public VectorSpace retrieveKnn(int k, final Vector prototype) {
 		// do something like quick select instead...
 		//System.out.println("SimpleVectorSpace.retrieveKnn" + this);
 		List<Vector> q = new ArrayList<Vector>(values());
-		long before = System.nanoTime();
+		//long before = System.nanoTime();
 		Collections.sort(q, new Comparator<Vector>() {
 
 			public int compare(Vector o1, Vector o2) {
@@ -82,7 +78,7 @@ public class SimpleVectorSpace extends AbstractVectorCollection {
 				return d1 < d2 ? -1 : d1 == d2 ? 0 : +1;
 			}
 		});
-		System.out.println("sorted " + q.size() + " [" + (System.nanoTime() - before) + " ns]");
+		//System.out.println("sorted " + q.size() + " [" + (System.nanoTime() - before) + " ns]");
 		List<Vector> subList = q.size() >= k ? q.subList(0, k) : q;
 		return new SimpleVectorSpace(this.dimensionality(), subList);
 	}

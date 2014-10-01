@@ -18,7 +18,6 @@
 package com.vectorization.server.command;
 
 import com.vectorization.core.Vector;
-import com.vectorization.core.collection.VectorCollection;
 import com.vectorization.core.database.Database;
 
 public class Find extends AbstractCommand  {
@@ -36,9 +35,7 @@ public class Find extends AbstractCommand  {
 	@Override
 	public String execute(Database database) {
 		super.execute(database);
-		
-		VectorCollection result = database.retrieveKnn(spaceName, k, v);
-		return result.toString();
+		return database.retrieveKnn(spaceName, k, v).toString();
 	}
 
 	public String getPermissionLevel() {

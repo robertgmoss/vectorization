@@ -19,7 +19,7 @@ package com.vectorization.driver;
 
 import com.vectorization.core.VectorizationException;
 import com.vectorization.core.collection.SimpleVectorSpace;
-import com.vectorization.core.collection.VectorCollection;
+import com.vectorization.core.collection.VectorSpace;
 
 public class Statement {
 	
@@ -34,7 +34,7 @@ public class Statement {
 	 * @param query
 	 * @return
 	 */
-	public VectorCollection executeQuery(String query){
+	public VectorSpace executeQuery(String query){
 		String result = execute(query);
 		if(result.equals("") || result.equals("empty")) return new SimpleVectorSpace(0);
 		// result should be a list of vectors
@@ -49,7 +49,7 @@ public class Statement {
 		return handler.processRequest(statement);
 	}
 	
-	public VectorCollection getResult(){
+	public VectorSpace getResult(){
 		return null;
 	}
 

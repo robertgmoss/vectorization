@@ -7,6 +7,11 @@ import com.vectorization.driver.builders.StatementBuilders;
 
 public class App extends Vectorization{
 	
+	@Override
+	public Connection getConnection() {
+		return new Connection("http://robertgmoss.co.uk", DEFAULT_PORT);
+	}
+	
 	public static void main(String[] args) {
 		App application = new App();
 		Connection connection = application.getConnection();

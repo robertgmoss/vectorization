@@ -18,21 +18,25 @@
 package com.vectorization.core.database;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import com.vectorization.core.Vector;
 import com.vectorization.core.VectorizationException;
+import com.vectorization.core.collection.FileCompositeCollection;
 import com.vectorization.core.collection.SimpleVectorSpace;
-import com.vectorization.core.collection.VectorCollection;
 
 public abstract class AbstractDatabase implements Database {
 
 	private final String databaseName;
-	private Map<String, VectorCollection> data = new LinkedHashMap<String, VectorCollection>();
+	private Map<String, FileCompositeCollection> data = new LinkedHashMap<String, FileCompositeCollection>();
 	private SpaceFactory defaultSpaceFactory;
 	private SpaceLoader spaceLoader = new SpaceLoader(this);
+	private Properties props;
 
 	private static void assertNameNotNull(String name, String operation) {
 		if (name == null)
@@ -50,16 +54,30 @@ public abstract class AbstractDatabase implements Database {
 		spaceLoader.loadAll(data, factory);
 	}
 
-
-
 	public File getDatabaseDir() throws IOException {
 		File dir = new File(databaseName);
 		if (!dir.exists()) {
 			dir.mkdir();
+			props = new Properties();
+			System.out.println("creating properties");
+			saveProperties(dir);
 		}
 		if (!dir.isDirectory())
 			throw new VectorizationException("No such database");
+		props = SpaceLoader.getDbProperties(dir);
 		return dir;
+	}
+
+	private void saveProperties(File dir) throws FileNotFoundException,
+			IOException {
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new File(dir, "db.properties"));
+			props.store(pw, databaseName + " properties");
+		} finally {
+			if (pw != null)
+				pw.close();
+		}
 	}
 
 	public Database create(String spaceName, int dimensionality) {
@@ -69,9 +87,17 @@ public abstract class AbstractDatabase implements Database {
 	public Database create(String spaceName, int dimensionality,
 			SpaceFactory factory) {
 		assertNameNotNull(spaceName, "create");
-		VectorCollection space = factory.createSpace(dimensionality);
+		FileCompositeCollection space = factory.createSpace(dimensionality,
+				getName(), spaceName);
 		insertSpace(spaceName, space);
-		saveSpace(spaceName);
+		props.setProperty(spaceName + ".dimensionality",
+				Integer.toString(dimensionality));
+		try {
+			saveProperties(getDatabaseDir());
+		} catch (Exception e) {
+			throw new VectorizationException(e);
+		}
+		// saveSpace(spaceName);
 		return this;
 	}
 
@@ -94,11 +120,9 @@ public abstract class AbstractDatabase implements Database {
 		}
 	}
 
-	public VectorCollection retrieveKnn(String spaceName, int k,
+	public Iterable<Vector> retrieveKnn(String spaceName, int k,
 			Vector prototype) {
-		long before = System.nanoTime();
-		spaceLoader.load(data, spaceName, getDefaultSpaceFactory());
-		System.out.println("loaded space [" + (System.nanoTime() - before) + " ns]");
+		// spaceLoader.load(data, spaceName, getDefaultSpaceFactory());
 		if (!data.containsKey(spaceName))
 			throw new VectorizationException("No such table: " + spaceName);
 		if (data.get(spaceName).dimensionality() != prototype.dimensionality()) {
@@ -117,13 +141,13 @@ public abstract class AbstractDatabase implements Database {
 
 	public Database removeAndSave(String space, String... vectorIds) {
 		remove(space, vectorIds);
-		saveSpace(space);
+		// saveSpace(space);
 		return this;
 	}
 
 	public Database insertAndSave(String space, Vector... vectors) {
 		insert(space, vectors);
-		saveSpace(space);
+		// saveSpace(space);
 		return this;
 	}
 
@@ -139,37 +163,34 @@ public abstract class AbstractDatabase implements Database {
 		data.get(space).insertAll(vectors);
 	}
 
-	public void insertSpace(String spaceName, VectorCollection space) {
-		long before = System.nanoTime();
+	public void insertSpace(String spaceName, FileCompositeCollection space) {
 		data.put(spaceName, space);
-		System.out.println("inserted space [" + (System.nanoTime() - before) + " ns]");
 	}
 
-	private void saveSpace(String space) {
-		try {
-			//System.out.print("saving...");
-			data.get(space).save(databaseName + File.separator + space);
-			//System.out.println("done");
-		} catch (IOException e) {
-			throw new VectorizationException(e);
-		}
-	}
+	// private void saveSpace(String space) {
+	// try {
+	// data.get(space).save(databaseName + File.separator + space);
+	// } catch (IOException e) {
+	// throw new VectorizationException(e);
+	// }
+	// }
 
 	public Vector show(String spaceName, String vectorName) {
-		return show(spaceName).get(vectorName);
+		return data.get(spaceName).get(vectorName);
 	}
 
-	public VectorCollection show(String spaceName) {
-		spaceLoader.load(data, spaceName, getDefaultSpaceFactory());
-		if (!data.containsKey(spaceName))
+	public Iterable<Vector> show(String spaceName) {
+		// spaceLoader.load(data, spaceName, getDefaultSpaceFactory());
+		if (!data.containsKey(spaceName)) {
 			return new SimpleVectorSpace(0);
+		}
 		return data.get(spaceName);
 	}
 
 	public Iterable<String> list() {
 		return data.keySet();
 	}
-	
+
 	public String getName() {
 		return databaseName;
 	}

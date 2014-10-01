@@ -1,6 +1,6 @@
 package com.vectorization.driver.builders;
 
-import com.vectorization.core.collection.VectorCollection;
+import com.vectorization.core.collection.VectorSpace;
 import com.vectorization.driver.Connection;
 
 public class QueryBuilder extends StatementBuilder{
@@ -9,7 +9,7 @@ public class QueryBuilder extends StatementBuilder{
 		super(statement);
 	}
 	
-	public VectorCollection execute(Connection conn) {
+	public VectorSpace execute(Connection conn) {
 		return conn.createStatement().executeQuery(getStatement());
 	}
 

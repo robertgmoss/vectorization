@@ -18,21 +18,16 @@
 package com.vectorization.core.database;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import com.vectorization.core.VectorizationException;
-import com.vectorization.core.collection.VectorCollection;
+import com.vectorization.core.collection.FileCompositeCollection;
 
 public class SpaceLoader {
 
@@ -50,8 +45,8 @@ public class SpaceLoader {
 			}
 		});
 	}
-	
-	public static Properties getDbProperties(File dir) throws IOException{
+
+	public static Properties getDbProperties(File dir) throws IOException {
 		Properties props = new Properties();
 		props.load(new FileReader(new File(dir, "db.properties")));
 		return props;
@@ -61,23 +56,52 @@ public class SpaceLoader {
 		return dir.listFiles(filter);
 	}
 
-	public void loadAll(Map<String, VectorCollection> data,
-			SpaceFactory factory) {
+	public void loadAll(Map<String, FileCompositeCollection> data, SpaceFactory factory) {
 		try {
 			File databaseDir = database.getDatabaseDir();
-			File[] tables = getDbFiles(databaseDir);
-			load(data, tables, factory);
+			//Properties props = getDbProperties(databaseDir);
+			//String spaces = props.getProperty("spaces");
+			//if (spaces != null) {
+				Set<String> spaceNames = getSpaceNames(databaseDir);
+				for (String space : spaceNames) {
+					System.out.println("loading space: " + space);
+					load(data, space, factory);
+				}
+			//}
 		} catch (Exception e) {
 			throw new VectorizationException(e);
 		}
 	}
 
-	public void load(Map<String, VectorCollection> data, String space,
+	private Set<String> getSpaceNames(File databaseDir) {
+		String[] files = databaseDir.list(new FilenameFilter() {
+			
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".db");
+			}
+		});
+		
+		Set<String> result = new LinkedHashSet<String>();
+		for(String f : files){
+			result.add(f.substring(0, f.indexOf(".")));
+		}
+		return result;
+	}
+
+	public void load(Map<String, FileCompositeCollection> data, String space,
 			SpaceFactory factory) {
 		try {
-			File[] tables = getDbFiles(database.getDatabaseDir(),
+			File databaseDir = database.getDatabaseDir();
+			File[] tables = getDbFiles(databaseDir,
 					createPartFilter(space));
-			load(data, tables, factory);
+			
+			if (tables.length > 0) {
+				Properties props = getDbProperties(databaseDir);
+				int dim = Integer.parseInt(props.getProperty(space+".dimensionality"));
+				FileCompositeCollection composite = factory.createSpace(dim,database.getName(), space,
+						tables);
+				data.put(space, composite);
+			}
 		} catch (Exception e) {
 			throw new VectorizationException(e);
 		}
@@ -87,72 +111,8 @@ public class SpaceLoader {
 		return new FilenameFilter() {
 
 			public boolean accept(File dir, String name) {
-				return name.startsWith(space + ".") && name.endsWith(".db");
+				return name.startsWith(space + ".part") && name.endsWith(".db");
 			}
 		};
 	}
-
-	private VectorCollection load(File file)
-			throws FileNotFoundException, IOException, ClassNotFoundException {
-		ObjectInputStream ois = null;
-		try {
-			ois = new ObjectInputStream(new FileInputStream(file));
-			long before = System.nanoTime();
-			VectorCollection collection = (VectorCollection) ois.readObject();
-			System.out.println("read object [" + (System.nanoTime() - before) + " ns]");
-			return collection;
-		} finally {
-			if (ois != null)
-				ois.close();
-		}
-	}
-
-	private void load(Map<String, VectorCollection> data,
-			File[] tables, SpaceFactory factory) throws FileNotFoundException,
-			ClassNotFoundException, IOException {
-		Map<String, List<VectorCollection>> partLists = new LinkedHashMap<String, List<VectorCollection>>();
-
-		for (File f : tables) {
-			String filename = f.getName();
-			VectorCollection table = load(f);
-			String tableName = removeSuffix(filename);
-			if (!tableName.contains(".part")) {
-				database.insertSpace(tableName, table);
-			} else {
-				tableName = removeSuffix(tableName);
-				addToPartList(partLists, table, tableName);
-			}
-		}
-		long before = System.nanoTime();
-		flattenPartLists(data, partLists, factory);
-		System.out.println("flattened part lists [" + (System.nanoTime() - before) + " ns]");
-	}
-
-	private void addToPartList(
-			Map<String, List<VectorCollection>> partLists,
-			VectorCollection table, String tableName) {
-		if (!partLists.containsKey(tableName)) {
-			partLists.put(tableName, new ArrayList<VectorCollection>());
-		}
-		List<VectorCollection> parts = partLists.get(tableName);
-		parts.add(table);
-	}
-
-	private String removeSuffix(String filename) {
-		return filename.substring(0, filename.lastIndexOf('.'));
-	}
-
-	private void flattenPartLists(Map<String, VectorCollection> data,
-			Map<String, List<VectorCollection>> partLists,
-			SpaceFactory factory) {
-		for (Entry<String, List<VectorCollection>> parts : partLists
-				.entrySet()) {
-			int dimensionality = parts.getValue().get(0).dimensionality();
-			database.insertSpace(
-					parts.getKey(),
-					factory.createCompositeTable(dimensionality,
-							parts.getValue()));
-		}
-	}
-
 }

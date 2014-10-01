@@ -6,10 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.vectorization.core.Metric;
-import com.vectorization.core.vectors.Vectors;
 import com.vectorization.util.Partition;
 
-public class VantagePointTree<M extends Metric<M>> implements MetricSpace<M> {
+public class VantagePointTree<M extends Metric<M>> implements Serializable{
 
 	private static final long serialVersionUID = -1239205914549364409L;
 	private Node root;
@@ -86,27 +85,14 @@ public class VantagePointTree<M extends Metric<M>> implements MetricSpace<M> {
 		return this;
 	}
 
-	public VantagePointTree<M> retrieveKnn(int k, M prototype) {
-		double threshold = Vectors.MAX_DISTANCE / (1e4);
-		double increment = 0.0;
-		VantagePointTree<M> result = rangeQuery(prototype, threshold);
-		while (threshold <= Vectors.MAX_DISTANCE && result.size() < k) {
-			threshold = threshold + increment;
-			
-			result = rangeQuery(prototype, threshold);
-			increment = threshold - increment;
-		}
-		return result;
-	}
-
-	private int size() {
+	public int size() {
 		return root == null ? 0 : root.size;
 	}
 
-	public VantagePointTree<M> rangeQuery(M query, double threshold) {
+	public List<M> rangeQuery(M query, double threshold) {
 		List<M> points = new ArrayList<M>();
 		rangeQuery(query, threshold, points, root);
-		return new VantagePointTree<M>(points);
+		return points;
 	}
 
 	private void rangeQuery(M query, double threshold, List<M> points, Node node) {

@@ -31,11 +31,13 @@ public class Insert extends AbstractCommand  {
 		this.spaceName = spaceName;
 	}
 
+	@Override
 	public String execute(Database database) {
 		super.execute(database);
 		try {
 			database.insertAndSave(spaceName,v);
 		} catch (VectorizationException e) {
+			e.printStackTrace();
 			return e.getMessage();
 		}
 		return "inserted " + v;

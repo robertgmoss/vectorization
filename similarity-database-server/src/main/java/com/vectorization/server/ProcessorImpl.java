@@ -65,6 +65,7 @@ public class ProcessorImpl implements Processor {
 			output = parseLine(inputLine).execute(database);
 		} catch (Exception e) {
 			log.error(e.getMessage());
+			e.printStackTrace();
 			output = e.getMessage();
 		}
 		return output;

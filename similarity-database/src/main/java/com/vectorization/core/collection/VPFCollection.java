@@ -17,24 +17,25 @@
  */
 package com.vectorization.core.collection;
 
-import java.util.Collection;
+import java.io.File;
+import java.util.List;
 
-public class VPFCollection extends CompositeVectorCollection{
+public class VPFCollection extends FileCompositeCollection {
 
 	private static final long serialVersionUID = -1947039174911459830L;
 
-	public VPFCollection(int dimensionality) {
-		super(dimensionality);
+	public VPFCollection(int dimensionality, String database, String name) {
+		super(dimensionality, database, name);
 	}
 
-	public VPFCollection(int dimensionality,
-			Collection<VectorCollection> value) {
-		super(dimensionality, value);
+	public VPFCollection(int dimensionality, String database, String name,
+			List<File> subCollections) {
+		super(dimensionality, database, name, subCollections);
 	}
 
 	@Override
-	public VectorCollection newCollection() {
-		return new VPTCollection(dimensionality());
+	public VectorSpace newCollection() {
+		return new VPTVectorSpace(dimensionality());
 	}
 
 }
