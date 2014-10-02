@@ -18,6 +18,7 @@
 package com.vectorization.driver.builders;
 
 import com.vectorization.core.Vector;
+import com.vectorization.core.VectorizationException;
 
 public class StatementBuilders {
 	
@@ -30,6 +31,7 @@ public class StatementBuilders {
 	}
 	
 	public static CreateBuilder create(String spaceName){
+		if(spaceName == null || spaceName.equals("")) throw new VectorizationException("Space name cannot be null or empty");
 		return new CreateBuilder("create space " + spaceName);
 	}
 	

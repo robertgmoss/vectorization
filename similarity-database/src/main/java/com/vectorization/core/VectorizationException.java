@@ -17,7 +17,6 @@
  */
 package com.vectorization.core;
 
-import java.io.IOException;
 
 /**
  * A runtime exception for handling errors that occur without breaking abstraction.

@@ -25,12 +25,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.vectorization.core.Vector;
 import com.vectorization.core.VectorizationException;
 import com.vectorization.core.collection.FileCompositeCollection;
 import com.vectorization.core.collection.SimpleVectorSpace;
 
 public abstract class AbstractDatabase implements Database {
+
+	private static final Logger log = LoggerFactory
+			.getLogger(AbstractDatabase.class);
 
 	private final String databaseName;
 	private Map<String, FileCompositeCollection> data = new LinkedHashMap<String, FileCompositeCollection>();
@@ -58,18 +64,15 @@ public abstract class AbstractDatabase implements Database {
 		File dir = new File(databaseName);
 		if (!dir.exists()) {
 			dir.mkdir();
-			props = new Properties();
-			System.out.println("creating properties");
-			saveProperties(dir);
 		}
 		if (!dir.isDirectory())
 			throw new VectorizationException("No such database");
-		props = SpaceLoader.getDbProperties(dir);
 		return dir;
 	}
 
 	private void saveProperties(File dir) throws FileNotFoundException,
 			IOException {
+		log.debug("saving properties" + props);
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new File(dir, "db.properties"));
@@ -97,14 +100,22 @@ public abstract class AbstractDatabase implements Database {
 		} catch (Exception e) {
 			throw new VectorizationException(e);
 		}
-		// saveSpace(spaceName);
+		log.info(databaseName + "." + spaceName + " created");
 		return this;
 	}
 
 	public void drop(String space) {
 		assertNameNotNull(space, "drop");
-		data.remove(space);
-		deleteTableFile(space);
+		try {
+			props.remove(space + ".dimensionality");
+			saveProperties(getDatabaseDir());
+			data.remove(space);
+			deleteTableFile(space);
+		} catch (Exception e) {
+			throw new VectorizationException(e);
+		}
+
+		log.info(databaseName + "." + space + " dropped");
 	}
 
 	private void deleteTableFile(String space) {
@@ -114,6 +125,7 @@ public abstract class AbstractDatabase implements Database {
 					.createPartFilter(space));
 			for (File f : spaceFiles) {
 				f.delete();
+				log.info(f.getName()+ " deleted");
 			}
 		} catch (IOException e) {
 			throw new VectorizationException(e);
@@ -122,7 +134,6 @@ public abstract class AbstractDatabase implements Database {
 
 	public Iterable<Vector> retrieveKnn(String spaceName, int k,
 			Vector prototype) {
-		// spaceLoader.load(data, spaceName, getDefaultSpaceFactory());
 		if (!data.containsKey(spaceName))
 			throw new VectorizationException("No such table: " + spaceName);
 		if (data.get(spaceName).dimensionality() != prototype.dimensionality()) {
@@ -141,13 +152,11 @@ public abstract class AbstractDatabase implements Database {
 
 	public Database removeAndSave(String space, String... vectorIds) {
 		remove(space, vectorIds);
-		// saveSpace(space);
 		return this;
 	}
 
 	public Database insertAndSave(String space, Vector... vectors) {
 		insert(space, vectors);
-		// saveSpace(space);
 		return this;
 	}
 
@@ -166,14 +175,6 @@ public abstract class AbstractDatabase implements Database {
 	public void insertSpace(String spaceName, FileCompositeCollection space) {
 		data.put(spaceName, space);
 	}
-
-	// private void saveSpace(String space) {
-	// try {
-	// data.get(space).save(databaseName + File.separator + space);
-	// } catch (IOException e) {
-	// throw new VectorizationException(e);
-	// }
-	// }
 
 	public Vector show(String spaceName, String vectorName) {
 		return data.get(spaceName).get(vectorName);
@@ -202,5 +203,9 @@ public abstract class AbstractDatabase implements Database {
 		sb.append(databaseName);
 		sb.append("\"");
 		return sb.toString();
+	}
+
+	public void setProperties(Properties dbProperties) {
+		props = dbProperties;
 	}
 }
