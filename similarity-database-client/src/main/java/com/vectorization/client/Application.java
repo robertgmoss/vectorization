@@ -145,7 +145,7 @@ public class Application extends Vectorization {
 	}
 
 	public static void main(String[] args) {
-		Injector injector = Guice.createInjector(new AppInjecter());
+		Injector injector = Guice.createInjector(new AppInjector());
 		Application app = injector.getInstance(Application.class);
 		app.run(args);
 	}

@@ -48,7 +48,7 @@ public interface VectorSpace extends MetricSpace<Vector>, Iterable<Vector> {
 	
 	VectorSpace insertAll(Vector... myObjects);
 	
-	VectorSpace insertAll(MetricSpace<Vector> myObjects);
+	//VectorSpace insertAll(MetricSpace<Vector> myObjects);
 	
 	Iterable<Vector> retrieveKnn(int k, Vector prototype);
 

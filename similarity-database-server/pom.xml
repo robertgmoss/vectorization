@@ -9,7 +9,6 @@
 	</parent>
 
 	<artifactId>vectorization-server</artifactId>
-	<packaging>jar</packaging>
 
 	<name>Vectorization Database Daemon</name>
 

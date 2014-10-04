@@ -13,6 +13,9 @@
 		<module>similarity-database-client</module>
 		<module>similarity-database</module>
 		<module>similarity-database-driver</module>
+
+		<module>similarity-database-master</module>
+		<module>similarity-database-node</module>
 	</modules>
 
 	<build>

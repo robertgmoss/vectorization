@@ -30,7 +30,7 @@ public class VantagePointForestSpaceFactory implements SpaceFactory{
 		return collection;
 	}
 
-	public FileCompositeCollection createSpace(int dimensionality, String database,String name, File... files) {
+	public FileCompositeCollection createSpace(int dimensionality, String database, String name, File... files) {
 		FileCompositeCollection collection = new VPFCollection(dimensionality,database, name, Arrays.asList(files));
 		return collection;
 	}

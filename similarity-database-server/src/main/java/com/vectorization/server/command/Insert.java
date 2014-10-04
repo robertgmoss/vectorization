@@ -35,7 +35,7 @@ public class Insert extends AbstractCommand  {
 	public String execute(Database database) {
 		super.execute(database);
 		try {
-			database.insertAndSave(spaceName,v);
+			database.insert(spaceName,v);
 		} catch (VectorizationException e) {
 			e.printStackTrace();
 			return e.getMessage();

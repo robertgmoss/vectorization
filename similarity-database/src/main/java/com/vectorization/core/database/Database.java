@@ -21,21 +21,19 @@ import com.vectorization.core.Vector;
 
 public interface Database {
 
-	Database create(String tableName, int dimensionality);
-	
-	Database create(String tableName, int dimensionality, SpaceFactory factory);
+	Database create(String spaceName, int dimensionality);
 
 	void drop(String space);
 
-	Iterable<Vector> retrieveKnn(String tableName, int k, Vector prototype);
+	Iterable<Vector> retrieveKnn(String spaceName, int k, Vector prototype);
 
-	Database removeAndSave(String table, String... myObjects);
+	Database remove(String table, String... vectors);
 
-	Database insertAndSave(String table, Vector... myObjects);
+	Database insert(String table, Vector... vectors);
 
-	Vector show(String tableName, String vectorName);
+	Vector show(String spaceName, String vectorName);
 
-	Iterable<Vector> show(String tableName);
+	Iterable<Vector> show(String spaceName);
 
 	Iterable<String> list();
 

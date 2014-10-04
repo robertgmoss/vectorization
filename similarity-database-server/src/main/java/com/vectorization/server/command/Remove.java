@@ -35,7 +35,7 @@ public class Remove extends AbstractCommand  {
 	public String execute(Database database) {
 		super.execute(database);
 		try {
-			database.removeAndSave(spaceName,v);
+			database.remove(spaceName,v);
 		} catch (VectorizationException e) {
 			return e.getMessage();
 		}

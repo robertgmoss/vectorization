@@ -47,8 +47,15 @@ public class StatementBuilders {
 		return new GrantBuilder("grant ", command);
 	}
 
-	public static InsertBuilder insert(Vector v){
-		return new InsertBuilder("insert " + v);
+	public static InsertBuilder insert(Vector... vectors){
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < vectors.length; i++){
+			sb.append(vectors[i]);
+			if(i != vectors.length - 1){
+				sb.append(", ");
+			}
+		}
+		return new InsertBuilder("insert " + sb);
 	}
 	
 	public static Builder list(){
@@ -59,8 +66,15 @@ public class StatementBuilders {
 		return new LoginBuilder("login " + user);
 	}
 	
-	public static RemoveBuilder remove(String id){
-		return new RemoveBuilder("remove " + id);
+	public static RemoveBuilder remove(String... vectors){
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < vectors.length; i++){
+			sb.append(vectors[i]);
+			if(i != vectors.length - 1){
+				sb.append(", ");
+			}
+		}
+		return new RemoveBuilder("remove " + sb);
 	}
 
 	public static QueryBuilder show(String space, String id){

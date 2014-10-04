@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sat Oct 04 23:04:36 BST 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-0148-dd31-6a37-0000037240c8 
+on database directory /home/rgm/workspace/Java/Vectorization/vectorization/similarity-database-master/Network with class loader sun.misc.Launcher$AppClassLoader@36d036 
+Loaded from file:/home/rgm/.m2/repository/org/apache/derby/derby/10.11.1.1/derby-10.11.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_65-b32
+user.dir=/home/rgm/workspace/Java/Vectorization/vectorization/similarity-database-master
+os.name=Linux
+os.arch=i386
+os.version=3.13.0-36-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
