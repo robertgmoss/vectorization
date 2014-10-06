@@ -17,6 +17,7 @@
 /similarity-database-client/target/
 /similarity-database-client/.settings/
 /similarity-database-client/.classpath
+/similarity-database-client/.project
 /similarity-database-client/pom.xml.releaseBackup
 
 /similarity-database-driver/target/
