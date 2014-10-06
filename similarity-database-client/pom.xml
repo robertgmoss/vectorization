@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.vectorization</groupId>
 		<artifactId>vectorization</artifactId>
-		<version>0.0.4</version>
+		<version>0.0.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>vectorization-client</artifactId>
@@ -22,12 +22,12 @@
 		<dependency>
 			<groupId>com.vectorization</groupId>
 			<artifactId>vectorization-database</artifactId>
-			<version>0.0.4</version>
+			<version>0.0.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vectorization</groupId>
 			<artifactId>vectorization-driver</artifactId>
-			<version>0.0.4</version>
+			<version>0.0.5-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
