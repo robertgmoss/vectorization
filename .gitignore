@@ -1,9 +1,15 @@
 /bin/
 /target/
+/.settings/
+/.classpath
+/.project
+/mvjars
+/pom.xml.releaseBackup
+/release.properties
+
 /similarity-database/target/
 /similarity-database/.settings/
 /similarity-database/.project
-/similarity-database/mvjars
 /similarity-database/release.properties
 /similarity-database/.classpath
 /similarity-database/pom.xml.releaseBackup
