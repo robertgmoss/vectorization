@@ -67,6 +67,7 @@ public abstract class AbstractVector implements Vector {
 			if (i < dimensionality() - 1) sb.append(", ");
 		}
 		sb.append("]");
+		if(id() == null || id().equals("")) return sb.toString();
 		return String.format("%15s = %s", this.id(), sb.toString());
 	}
 }

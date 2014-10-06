@@ -36,6 +36,9 @@ import com.vectorization.server.Processor;
 import com.vectorization.server.ProcessorFactory;
 import com.vectorization.server.Server;
 import com.vectorization.server.command.CommandFactory;
+import com.vectorization.server.master.network.Network;
+import com.vectorization.server.master.network.NetworkImpl;
+import com.vectorization.server.master.parsing.MasterCommandFactory;
 import com.vectorization.server.security.Security;
 import com.vectorization.server.security.SecurityImpl;
 

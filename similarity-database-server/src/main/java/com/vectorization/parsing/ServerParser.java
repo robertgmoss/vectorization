@@ -30,7 +30,7 @@ import com.vectorization.server.Processor;
 import com.vectorization.server.command.CommandFactory;
 import com.vectorization.server.security.Security;
 
-public class ServerParser extends Parser<Command> {
+public class ServerParser extends Parser<ServerCommand> {
 
 	private Processor processor;
 	private CommandFactory factory;
@@ -46,7 +46,7 @@ public class ServerParser extends Parser<Command> {
 	}
 
 	@Override
-	public Command parse() {
+	public ServerCommand parse() {
 		if (getLookAhead().type.equals(SSType.NAME)) {
 			if (getLookAhead().val.equals("login")) {
 				return login();
@@ -88,7 +88,7 @@ public class ServerParser extends Parser<Command> {
 		return factory.newNullCommand("No such command");
 	}
 
-	private Command passwd() {
+	private ServerCommand passwd() {
 		match(SSType.NAME, "change");
 		match(SSType.NAME, "password");
 		match(SSType.NAME, "to");
@@ -96,7 +96,7 @@ public class ServerParser extends Parser<Command> {
 		return factory.newChangePasswordCommand(security, password);
 	}
 
-	private Command grant() {
+	private ServerCommand grant() {
 		match(SSType.NAME, "grant");
 
 		List<String> permissions = new ArrayList<String>();
@@ -141,7 +141,7 @@ public class ServerParser extends Parser<Command> {
 				spaceName, username);
 	}
 
-	private Command addUser() {
+	private ServerCommand addUser() {
 		match(SSType.NAME, "add");
 		match(SSType.NAME, "user");
 		String username = name();
@@ -151,7 +151,7 @@ public class ServerParser extends Parser<Command> {
 		return factory.newAddUserCommand(security, username, password);
 	}
 
-	private Command login() {
+	private ServerCommand login() {
 		match(SSType.NAME, "login");
 		String username = name();
 		match(SSType.NAME, "with");
@@ -159,7 +159,7 @@ public class ServerParser extends Parser<Command> {
 		return factory.newLoginCommand(username, password);
 	}
 
-	private Command use() {
+	private ServerCommand use() {
 		match(SSType.NAME, "use");
 		String databaseName = name();
 		Database database = factory.newDatabase(databaseName);
@@ -167,7 +167,7 @@ public class ServerParser extends Parser<Command> {
 		return factory.newUseCommand(databaseName);
 	}
 
-	private Command show() {
+	private ServerCommand show() {
 		match(SSType.NAME, "show");
 		String spaceName = "";
 		if (!getLookAhead().type.equals(SSType.EOF_TYPE)) {
@@ -181,12 +181,12 @@ public class ServerParser extends Parser<Command> {
 		return factory.newShowCommand(spaceName, vectorName);
 	}
 
-	private Command list() {
+	private ServerCommand list() {
 		match(SSType.NAME, "list");
 		return factory.newListCommand();
 	}
 
-	private Command insert() {
+	private ServerCommand insert() {
 		match(SSType.NAME, "insert");
 		String vectorName = name();
 		match(SSType.EQUALS);
@@ -196,7 +196,7 @@ public class ServerParser extends Parser<Command> {
 		return factory.newInsertCommand(tableName, v);
 	}
 
-	private Command remove() {
+	private ServerCommand remove() {
 		match(SSType.NAME, "remove");
 		String vectorName = name();
 		match(SSType.NAME, "from");
@@ -204,7 +204,7 @@ public class ServerParser extends Parser<Command> {
 		return factory.newRemoveCommand(tableName, vectorName);
 	}
 
-	private Command find() {
+	private ServerCommand find() {
 		match(SSType.NAME, "find");
 		int k = integer();
 		match(SSType.NAME, "nearest");
@@ -226,7 +226,7 @@ public class ServerParser extends Parser<Command> {
 		}
 	}
 
-	private Command create() {
+	private ServerCommand create() {
 		match(SSType.NAME, "create");
 		match(SSType.NAME, "space");
 		String spaceName = name();
@@ -236,7 +236,7 @@ public class ServerParser extends Parser<Command> {
 		return factory.newCreateCommand(spaceName, dimensionality);
 	}
 
-	private Command drop() {
+	private ServerCommand drop() {
 		match(SSType.NAME, "drop");
 		String spaceName = name();
 		return factory.newDropCommand(spaceName);

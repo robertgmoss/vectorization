@@ -19,9 +19,9 @@ package com.vectorization.server.command;
 
 import com.vectorization.core.VectorizationException;
 import com.vectorization.core.database.Database;
-import com.vectorization.parsing.Command;
+import com.vectorization.parsing.ServerCommand;
 
-public abstract class AbstractCommand implements Command{
+public abstract class AbstractCommand implements ServerCommand{
 
 	public String execute(Database database) {
 		if(database == null) throw new VectorizationException("Database is null");

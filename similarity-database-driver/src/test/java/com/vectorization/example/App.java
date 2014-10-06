@@ -18,7 +18,7 @@
 package com.vectorization.example;
 
 import com.vectorization.core.vectors.Vectors;
-import com.vectorization.driver.Connection;
+import com.vectorization.driver.VectorizationConnection;
 import com.vectorization.driver.Vectorization;
 import com.vectorization.driver.builders.StatementBuilders;
 
@@ -26,7 +26,7 @@ public class App extends Vectorization{
 	
 	public static void main(String[] args) {
 		App application = new App();
-		Connection connection = application.getConnection();
+		VectorizationConnection connection = application.getConnection();
 		connection.connect();
 //		Statement statement = connection.createStatement();
 //		String result = statement.execute("login admin with admin");

@@ -29,44 +29,54 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.vectorization.core.database.Database;
-import com.vectorization.parsing.Command;
 import com.vectorization.parsing.Parser;
 import com.vectorization.parsing.ParserFactory;
+import com.vectorization.parsing.ServerCommand;
+import com.vectorization.parsing.ServerLexer;
 import com.vectorization.server.Processor;
+import com.vectorization.server.master.command.MasterCommand;
+import com.vectorization.server.master.network.Network;
+import com.vectorization.server.master.parsing.MasterParser;
 import com.vectorization.util.IO;
 
 public class MasterProcessor implements Processor {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(MasterProcessor.class);
+	private static final Logger log = LoggerFactory.getLogger(MasterProcessor.class);
 
 	private Database database;
 	private PrintWriter out;
 	private BufferedReader in;
 	private ParserFactory parserFactory;
+//	private Handler handler;
+	private Network network;
 
 	@Inject
-	public MasterProcessor(ParserFactory parserFactory, @Assisted OutputStream os,
+	public MasterProcessor(ParserFactory parserFactory, Network network, @Assisted OutputStream os,
 			@Assisted InputStream is) throws IOException {
 		this.parserFactory = parserFactory;
+		this.network = network;
 		this.in = IO.createBufferedReader(is);
 		this.out = IO.createPrintWriter(os);
+//		this.handler = createHandler();
 	}
+//
+//	private Handler createHandler() {
+//		return new MasterServerHandler(this, parserFactory);
+//	}
 
 	private void process(BufferedReader in) throws IOException {
 		String inputLine;
 		while ((inputLine = in.readLine()) != null) {
-			out.println(process(inputLine));
+			out.println(processLine(inputLine));
 		}
 	}
-
-	private String process(String inputLine) {
-		String output = "";
-		try {
-			output = parseLine(inputLine).execute(database);
-		} catch (Exception e) {
+	
+	private String processLine(String inputLine){
+		String output;
+		try{
+			output = processRequest(inputLine);
+		}catch (Exception e) {
 			log.error(e.getMessage());
-			e.printStackTrace();
 			output = e.getMessage();
 		}
 		return output;
@@ -74,11 +84,6 @@ public class MasterProcessor implements Processor {
 
 	public void setDatabase(Database database) {
 		this.database = database;
-	}
-
-	private Command parseLine(String input) {
-		Parser<Command> p = parserFactory.create(this, input);
-		return p.parse();
 	}
 
 	public void close() throws IOException {
@@ -93,5 +98,21 @@ public class MasterProcessor implements Processor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String processRequest(final String command) {
+		MasterCommand forward = new MasterCommand() {
+
+			public String execute(Network network) {
+				return forward(command);
+			}
+		};
+		Parser<MasterCommand> p = new MasterParser(new ServerLexer(command), forward);
+		return p.parse().execute(network);
+	}
+	
+	private String forward(String command) {
+		Parser<ServerCommand> parser = parserFactory.create(this, command);
+		return parser.parse().execute(database);
 	}
 }

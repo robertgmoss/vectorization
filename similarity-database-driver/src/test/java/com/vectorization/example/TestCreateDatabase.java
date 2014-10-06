@@ -19,15 +19,13 @@ package com.vectorization.example;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
-import com.vectorization.core.VectorizationException;
-import com.vectorization.driver.Connection;
+import com.vectorization.driver.VectorizationConnection;
 import com.vectorization.driver.builders.StatementBuilders;
 
 public class TestCreateDatabase {
 
-	private Connection connection;
+	private VectorizationConnection connection;
 
 	@Before
 	public void setUp() {
@@ -45,18 +43,18 @@ public class TestCreateDatabase {
 		connection.close();
 	}
 
-	@Test
+	//@Test
 	public void testCreate() {
 		String result = StatementBuilders.create("testSpace").withDimensionality(2).execute(connection);
 		System.out.println(result);
 	}
 	
-	@Test(expected=VectorizationException.class)
+	//@Test(expected=VectorizationException.class)
 	public void testCreateBlank(){
 		StatementBuilders.create("").withDimensionality(2).execute(connection);
 	}
 	
-	@Test(expected=VectorizationException.class)
+	//@Test(expected=VectorizationException.class)
 	public void testCreateNull(){
 		StatementBuilders.create(null).withDimensionality(2).execute(connection);
 	}

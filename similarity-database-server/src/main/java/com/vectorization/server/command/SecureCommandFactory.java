@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.vectorization.core.Vector;
 import com.vectorization.core.database.Database;
-import com.vectorization.parsing.Command;
+import com.vectorization.parsing.ServerCommand;
 import com.vectorization.server.security.Security;
 
 public class SecureCommandFactory implements CommandFactory{
@@ -36,61 +36,61 @@ public class SecureCommandFactory implements CommandFactory{
 		return delegate.newDatabase(name);
 	}
 
-	public Command newCreateCommand(String spaceName, int dimensionality) {
+	public ServerCommand newCreateCommand(String spaceName, int dimensionality) {
 		return new SecureCommand(delegate.newCreateCommand(spaceName, dimensionality));
 	}
 
-	public Command newDropCommand(String spaceName) {
+	public ServerCommand newDropCommand(String spaceName) {
 		return new SecureCommand(delegate.newDropCommand(spaceName));
 	}
 
-	public Command newFindCommand(String spaceName, int k, Vector v) {
+	public ServerCommand newFindCommand(String spaceName, int k, Vector v) {
 		return new SecureCommand(delegate.newFindCommand(spaceName, k, v));
 	}
 
-	public Command newFindVectorCommand(String space, int k, String querySpace,
+	public ServerCommand newFindVectorCommand(String space, int k, String querySpace,
 			String queryVectorName) {
 		return new SecureCommand(delegate.newFindVectorCommand(space, k, querySpace, queryVectorName));
 	}
 
-	public Command newInsertCommand(String spaceName, Vector v) {
+	public ServerCommand newInsertCommand(String spaceName, Vector v) {
 		return new SecureCommand(delegate.newInsertCommand(spaceName, v));
 	}
 
-	public Command newListCommand() {
+	public ServerCommand newListCommand() {
 		return new SecureCommand(delegate.newListCommand());
 	}
 
-	public Command newNullCommand(String msg) {
+	public ServerCommand newNullCommand(String msg) {
 		return new SecureCommand(new Null(msg));
 	}
 
-	public Command newRemoveCommand(String spaceName, String vectorName) {
+	public ServerCommand newRemoveCommand(String spaceName, String vectorName) {
 		return new SecureCommand(delegate.newRemoveCommand(spaceName, vectorName));
 	}
 
-	public Command newShowCommand(String spaceName, String vectorName) {
+	public ServerCommand newShowCommand(String spaceName, String vectorName) {
 		return new SecureCommand(delegate.newShowCommand(spaceName, vectorName));
 	}
 
-	public Command newUseCommand(String databaseName) {
+	public ServerCommand newUseCommand(String databaseName) {
 		return new SecureCommand(delegate.newUseCommand(databaseName));
 	}
 
-	public Command newLoginCommand(String username, String password) {
+	public ServerCommand newLoginCommand(String username, String password) {
 		return delegate.newLoginCommand(username, password);
 	}
 
-	public Command newAddUserCommand(Security security,String username, String password) {
+	public ServerCommand newAddUserCommand(Security security,String username, String password) {
 		return new SecureCommand(delegate.newAddUserCommand(security,username, password));
 	}
 
-	public Command newGrantCommand(Security security,List<String> permissions, String dbName,
+	public ServerCommand newGrantCommand(Security security,List<String> permissions, String dbName,
 			String spaceName, String username) {
 		return new SecureCommand(delegate.newGrantCommand(security,permissions, dbName, spaceName, username));
 	}
 
-	public Command newChangePasswordCommand(Security security,String password) {
+	public ServerCommand newChangePasswordCommand(Security security,String password) {
 		return new SecureCommand(delegate.newChangePasswordCommand(security, password));
 	}
 

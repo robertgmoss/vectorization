@@ -22,7 +22,7 @@ public class Vectorization{
 	public static final String DEFAULT_ADDRESS = "localhost";
 	public static final int DEFAULT_PORT = 4567;
 
-	public Connection getConnection(){
-		return new Connection(DEFAULT_ADDRESS, DEFAULT_PORT);
+	public VectorizationConnection getConnection(){
+		return new VectorizationConnection(DEFAULT_ADDRESS, DEFAULT_PORT);
 	}
 }

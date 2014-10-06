@@ -4,7 +4,7 @@
 
 	<groupId>com.vectorization</groupId>
 	<artifactId>vectorization</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Vectorization Similarity Database</name>
 
@@ -12,6 +12,10 @@
 		<module>similarity-database-server</module>
 		<module>similarity-database-client</module>
 		<module>similarity-database</module>
+		<module>similarity-database-driver</module>
+
+		<module>similarity-database-master</module>
+		<module>similarity-database-node</module>
 	</modules>
 
 	<build>
@@ -73,6 +77,17 @@
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.6.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-assistedinject</artifactId>
+			<version>3.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<scm>

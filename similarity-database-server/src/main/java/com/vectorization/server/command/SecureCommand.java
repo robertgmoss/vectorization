@@ -22,13 +22,13 @@ import org.apache.shiro.subject.Subject;
 
 import com.vectorization.core.VectorizationException;
 import com.vectorization.core.database.Database;
-import com.vectorization.parsing.Command;
+import com.vectorization.parsing.ServerCommand;
 
 public class SecureCommand extends AbstractCommand {
 
-	private Command delegate;
+	private ServerCommand delegate;
 
-	public SecureCommand(Command delegate) {
+	public SecureCommand(ServerCommand delegate) {
 		this.delegate = delegate;
 	}
 

@@ -1,1 +1,7 @@
 /bin/
+/target/
+/similarity-database/target/
+/similarity-database-client/target/
+/similarity-database-master/target/
+/similarity-database-node/target/
+/similarity-database-server/target/

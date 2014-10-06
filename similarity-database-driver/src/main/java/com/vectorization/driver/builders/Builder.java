@@ -17,7 +17,7 @@
  */
 package com.vectorization.driver.builders;
 
-import com.vectorization.driver.Connection;
+import com.vectorization.driver.VectorizationConnection;
 import com.vectorization.driver.Statement;
 
 public class Builder extends StatementBuilder{
@@ -30,7 +30,7 @@ public class Builder extends StatementBuilder{
 		return getStatement();
 	}
 	
-	public String execute(Connection conn){
+	public String execute(VectorizationConnection conn){
 		Statement statement = conn.createStatement();
 		return statement.execute(getStatement());
 	}

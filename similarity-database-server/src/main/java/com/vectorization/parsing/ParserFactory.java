@@ -21,5 +21,5 @@ import com.vectorization.server.Processor;
 
 public interface ParserFactory {
 	
-	Parser<Command> create(Processor processor, String input);
+	Parser<ServerCommand> create(Processor processor, String input);
 }

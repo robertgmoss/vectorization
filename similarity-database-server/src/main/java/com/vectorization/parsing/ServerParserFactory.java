@@ -35,7 +35,7 @@ public class ServerParserFactory implements ParserFactory {
 		this.lexerFactory = lexerFactory;
 	}
 
-	public Parser<Command> create(Processor processor, String input) {
+	public Parser<ServerCommand> create(Processor processor, String input) {
 		Lexer l = lexerFactory.create(input);
 		return new ServerParser(security, commandFactory, processor, l);
 	}

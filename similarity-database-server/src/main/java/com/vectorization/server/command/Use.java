@@ -18,9 +18,9 @@
 package com.vectorization.server.command;
 
 import com.vectorization.core.database.Database;
-import com.vectorization.parsing.Command;
+import com.vectorization.parsing.ServerCommand;
 
-public class Use implements Command {
+public class Use implements ServerCommand {
 	
 	private String dbName;
 

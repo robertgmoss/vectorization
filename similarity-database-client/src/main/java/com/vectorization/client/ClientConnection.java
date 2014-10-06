@@ -22,12 +22,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.vectorization.core.VectorizationException;
-import com.vectorization.driver.Connection;
+import com.vectorization.driver.VectorizationConnection;
 import com.vectorization.driver.Handler;
 import com.vectorization.driver.Vectorization;
 import com.vectorization.util.IO;
 
-public class ClientConnection extends Connection {
+public class ClientConnection extends VectorizationConnection {
 
 	private BufferedReader stdIn = IO.createBufferedReader(System.in);
 

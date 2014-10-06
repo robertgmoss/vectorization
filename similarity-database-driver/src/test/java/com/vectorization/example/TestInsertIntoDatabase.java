@@ -20,17 +20,16 @@ package com.vectorization.example;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 
 import com.vectorization.core.Vector;
 import com.vectorization.core.collection.VectorSpace;
 import com.vectorization.core.vectors.Vectors;
-import com.vectorization.driver.Connection;
+import com.vectorization.driver.VectorizationConnection;
 import com.vectorization.driver.builders.StatementBuilders;
 
 public class TestInsertIntoDatabase {
 
-	private Connection connection;
+	private VectorizationConnection connection;
 	private String spaceName = "insertTestSpace";
 
 	@Before
@@ -51,7 +50,7 @@ public class TestInsertIntoDatabase {
 		connection.close();
 	}
 
-	@Test
+	//@Test
 	public void testInsert() {
 		String id = "a";
 		Vector vector = Vectors.createNormalisedVector(id, Math.random(), Math.random());

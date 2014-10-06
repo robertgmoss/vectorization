@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.vectorization.core.database.Database;
-import com.vectorization.parsing.Command;
 import com.vectorization.parsing.Parser;
 import com.vectorization.parsing.ParserFactory;
+import com.vectorization.parsing.ServerCommand;
 import com.vectorization.server.Processor;
 import com.vectorization.util.IO;
 
@@ -76,8 +76,8 @@ public class NodeProcessor implements Processor {
 		this.database = database;
 	}
 
-	private Command parseLine(String input) {
-		Parser<Command> p = parserFactory.create(this, input);
+	private ServerCommand parseLine(String input) {
+		Parser<ServerCommand> p = parserFactory.create(this, input);
 		return p.parse();
 	}
 
@@ -93,5 +93,9 @@ public class NodeProcessor implements Processor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Database getDatabase() {
+		return database;
 	}
 }

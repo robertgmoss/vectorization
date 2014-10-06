@@ -42,7 +42,6 @@ public class Application {
 	private CommandLineParser commandLineParser;
 	private Server server;
 
-
 	@Inject
 	public Application(CommandLineParser commandLineparser, Server server) {
 		this.commandLineParser = commandLineparser;

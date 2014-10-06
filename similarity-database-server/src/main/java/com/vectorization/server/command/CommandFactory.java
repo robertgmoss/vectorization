@@ -21,39 +21,39 @@ import java.util.List;
 
 import com.vectorization.core.Vector;
 import com.vectorization.core.database.Database;
-import com.vectorization.parsing.Command;
+import com.vectorization.parsing.ServerCommand;
 import com.vectorization.server.security.Security;
 
 public interface CommandFactory {
 	
 	Database newDatabase(String name);
 
-	Command newCreateCommand(String spaceName, int dimensionality);
+	ServerCommand newCreateCommand(String spaceName, int dimensionality);
 	
-	Command newDropCommand(String spaceName);
+	ServerCommand newDropCommand(String spaceName);
 	
-	Command newFindCommand(String spaceName, int k, Vector v);
+	ServerCommand newFindCommand(String spaceName, int k, Vector v);
 	
-	Command newFindVectorCommand(String space, int k, String querySpace, String queryVectorName);
+	ServerCommand newFindVectorCommand(String space, int k, String querySpace, String queryVectorName);
 	
-	Command newInsertCommand(String spaceName, Vector v);
+	ServerCommand newInsertCommand(String spaceName, Vector v);
 	
-	Command newListCommand();
+	ServerCommand newListCommand();
 	
-	Command newNullCommand(String msg);
+	ServerCommand newNullCommand(String msg);
 	
-	Command newRemoveCommand(String spaceName, String vectorName);
+	ServerCommand newRemoveCommand(String spaceName, String vectorName);
 	
-	Command newShowCommand(String spaceName, String vectorName);
+	ServerCommand newShowCommand(String spaceName, String vectorName);
 	
-	Command newUseCommand(String databaseName);
+	ServerCommand newUseCommand(String databaseName);
 
-	Command newLoginCommand(String username, String password);
+	ServerCommand newLoginCommand(String username, String password);
 
-	Command newAddUserCommand(Security security,String username, String password);
+	ServerCommand newAddUserCommand(Security security,String username, String password);
 
-	Command newGrantCommand(Security security,List<String> permissions, String dbName,
+	ServerCommand newGrantCommand(Security security,List<String> permissions, String dbName,
 			String spaceName, String username);
 
-	Command newChangePasswordCommand(Security security, String password);
+	ServerCommand newChangePasswordCommand(Security security, String password);
 }
