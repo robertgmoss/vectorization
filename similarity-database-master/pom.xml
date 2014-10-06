@@ -3,19 +3,19 @@
   <parent>
     <groupId>com.vectorization</groupId>
     <artifactId>vectorization</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.4</version>
   </parent>
   <artifactId>vectorization-master</artifactId>
   <dependencies>
   	<dependency>
   		<groupId>com.vectorization</groupId>
   		<artifactId>vectorization-server</artifactId>
-  		<version>0.0.4-SNAPSHOT</version>
+  		<version>0.0.4</version>
   	</dependency>
   	<dependency>
   		<groupId>com.vectorization</groupId>
   		<artifactId>vectorization-driver</artifactId>
-  		<version>0.0.4-SNAPSHOT</version>
+  		<version>0.0.4</version>
   	</dependency>
   </dependencies>
 </project>
