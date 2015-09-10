@@ -1,4 +1,1 @@
-gems:
-- rouge
-markdown:    kramdown
-highlighter: rouge
+markdown: kramdown

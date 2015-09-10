@@ -68,14 +68,14 @@ and override the factory method, eg:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="kd">extends</span> <span class="n">Vectorization</span><span class="o">{</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Connection</span> <span class="n">getConnection</span><span class="o">(){</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">Connection</span><span class="o">(&lt;</span><span class="n">address</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;);</span>
+    <span class="kd">public</span> <span class="n">Connection</span> <span class="nf">getConnection</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Connection</span><span class="o">(&lt;</span><span class="n">address</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;);</span>
     <span class="o">}</span>
 <span class="o">}</span></code></pre></div>
 
 <p>This allows us to write applications in the following way:</p>
 
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">App</span> <span class="n">application</span> <span class="o">=</span> <span class="k">new</span> <span class="n">App</span><span class="o">();</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">App</span> <span class="n">application</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">App</span><span class="o">();</span>
 <span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">application</span><span class="o">.</span><span class="na">getConnection</span><span class="o">();</span>
 <span class="n">connection</span><span class="o">.</span><span class="na">connect</span><span class="o">();</span></code></pre></div>
 
@@ -85,7 +85,7 @@ and override the factory method, eg:</p>
 or query the Vectorization database.  This can either be entered as a String:  </p>
 
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Statement</span> <span class="n">statement</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span>
-<span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="s">"login admin with admin"</span><span class="o">);</span></code></pre></div>
+<span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="s">&quot;login admin with admin&quot;</span><span class="o">);</span></code></pre></div>
 
 <p>or you can use the StatementBuilders as described in the CRUD Tutorials</p>
 
