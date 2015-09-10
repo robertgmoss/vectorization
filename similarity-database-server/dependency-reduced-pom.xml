@@ -3,7 +3,7 @@
   <parent>
     <artifactId>vectorization</artifactId>
     <groupId>com.vectorization</groupId>
-    <version>0.0.4</version>
+    <version>0.0.5-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>vectorization-server</artifactId>
@@ -38,7 +38,7 @@
         <resources>
           <resource>
             <filtering>true</filtering>
-            <directory>/home/rgm/workspace/Java/Vectorization/vectorization/similarity-database-server/src/main/resources</directory>
+            <directory>/Users/robert/workspace/vectorization/similarity-database-server/src/main/resources</directory>
           </resource>
         </resources>
       </build>

@@ -39,8 +39,13 @@ public class Application extends Vectorization {
 
 	public static void printVersion() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("vectorization Version " + VERSION + " for JVM.\n");
-		sb.append("Copyright (c) 2014, Robert Moss. All rights reserved.\n");
+		sb.append("__     __           _                _             _    _\n");               
+		sb.append("\\ \\   / /___   ___ | |_  ___   _ __ (_) ____ __ _ | |_ (_)  ___   _ __\n");  
+		sb.append(" \\ \\ / // _ \\ / __|| __|/ _ \\ | '__|| ||_  // _` || __|| | / _ \\ | '_ \\\n"); 
+		sb.append("  \\ V /|  __/| (__ | |_| (_) || |   | | / /| (_| || |_ | || (_) || | | |\n");
+		sb.append("   \\_/  \\___| \\___| \\__|\\___/ |_|   |_|/___|\\__,_| \\__||_| \\___/ |_| |_|\n\n");
+		sb.append("Vectorization Version " + VERSION + " for JVM.\n");
+		sb.append("Copyright (c) 2014-15, Robert Moss. All rights reserved.\n");
 		System.out.println(sb);
 	}
 
