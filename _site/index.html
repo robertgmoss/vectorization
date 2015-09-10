@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/syntax.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Vectorization by robertgmoss</title>
+  </head>
+
+  <body>
+
+
+
+    <header>
+      <div class="inner">
+        <h1>Vectorization</h1>
+        <h2>Vector Similarity Database</h2>
+        <a href="https://github.com/robertgmoss/vectorization" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+
+
+        <section id="main-content">
+         <h1 id="welcome">Welcome!</h1>
+
+<p>Vectorization is a database management system for vector spaces.  We provide
+a client-server model for you to manage your vectors in your similarity applications.</p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>If it is not yet running, be sure to start the vectorization server. </p>
+
+<h3 id="logging-in">Logging in</h3>
+
+<p>To log in with the vectorization client, you can set the username and 
+password as a command line option.  Alternatively, you can authenticate
+once a connection has been made to the server using the following command:</p>
+
+<p>(A default user is created when the server is first run with username 
+  <code>&lt;admin&gt;</code> with password <code>&lt;admin&gt;</code>.)</p>
+
+<pre><code>login &lt;username&gt; with &lt;password&gt;
+</code></pre>
+
+<p>You can also use this command to switch users once logged in.</p>
+
+<h3 id="using-the-java-api">Using the Java API</h3>
+
+<h4 id="establishing-a-connection">Establishing a connection</h4>
+<p>Applications start with an instance of Vectorization, which contains a factory method
+for establishing a connection.  This default implementation provides a connection
+to <code>&lt;localhost&gt;</code> on port <code>&lt;4567&gt;</code>; to change this it is best to subclass Vectorization
+and override the factory method, eg:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="kd">extends</span> <span class="n">Vectorization</span><span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Connection</span> <span class="n">getConnection</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">Connection</span><span class="o">(&lt;</span><span class="n">address</span><span class="o">&gt;,</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>This allows us to write applications in the following way:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">App</span> <span class="n">application</span> <span class="o">=</span> <span class="k">new</span> <span class="n">App</span><span class="o">();</span>
+<span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">application</span><span class="o">.</span><span class="na">getConnection</span><span class="o">();</span>
+<span class="n">connection</span><span class="o">.</span><span class="na">connect</span><span class="o">();</span></code></pre></div>
+
+<h4 id="writing-statements">Writing statements</h4>
+
+<p>Once a connection has been established, you can write statements to control
+or query the Vectorization database.  This can either be entered as a String:  </p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Statement</span> <span class="n">statement</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span>
+<span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="s">"login admin with admin"</span><span class="o">);</span></code></pre></div>
+
+<p>or you can use the StatementBuilders as described in the CRUD Tutorials</p>
+
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/robertgmoss/vectorization/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/robertgmoss/vectorization/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/robertgmoss/vectorization"></a> is maintained by <a href="https://github.com/robertgmoss">robertgmoss</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+
+  </body>
+</html>
+
