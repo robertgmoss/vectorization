@@ -1,2 +1,4 @@
+gems:
+- rouge
 markdown:    kramdown
 highlighter: rouge
