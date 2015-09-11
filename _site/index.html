@@ -39,6 +39,34 @@
 <p>Vectorization is a database management system for vector spaces.  We provide
 a client-server model for you to manage your vectors in your similarity applications.</p>
 
+<h2 id="installation">Installation</h2>
+
+<h3 id="running-from-jars">Running from JARs</h3>
+
+<h4 id="running-the-vectorization-server">Running the Vectorization Server</h4>
+
+<p>to run the server:</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">usage: java -jar vectorization-server-XXX.jar [--help] [-P &lt;arg&gt;] [-V]
+    --help         Print this message
+ -P,--port &lt;arg&gt;   Port number to use for connection
+ -V,--version      Output version information and exit.</code></pre></div>
+
+<h4 id="running-the-vectorization-client">Running the Vectorization Client</h4>
+
+<p>to run the client:</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">usage: java -jar vectorization-client-XXX.jar [-D &lt;arg&gt;] [-h
+       &lt;arg&gt;] [--help] [-P &lt;arg&gt;] [-p &lt;arg&gt;] [-u &lt;arg&gt;] [-V]
+ -D,--database &lt;arg&gt;   Database to use.
+ -h,--host &lt;arg&gt;       Connect to host.
+    --help             Print this message
+ -P,--port &lt;arg&gt;       Port number to use for connection
+ -p,--password &lt;arg&gt;   Password to use when connecting to server.  If
+                       password is not given it&#39;s asked from the tty.
+ -u,--user &lt;arg&gt;       User for login if not current user.
+ -V,--version          Output version information and exit.</code></pre></div>
+
 <h2 id="getting-started">Getting Started</h2>
 
 <p>If it is not yet running, be sure to start the vectorization server. </p>
@@ -57,9 +85,81 @@ once a connection has been made to the server using the following command:</p>
 
 <p>You can also use this command to switch users once logged in.</p>
 
-<h3 id="using-the-java-api">Using the Java API</h3>
+<h3 id="creating-a-database">Creating a Database</h3>
 
-<h4 id="establishing-a-connection">Establishing a connection</h4>
+<pre><code>use &lt;databasename&gt;
+</code></pre>
+
+<p>where <code>&lt;databasename&gt;</code> is a legal identifier in accordance with the java programming language.</p>
+
+<h3 id="creating-a-vector-space">Creating a Vector Space</h3>
+
+<pre><code> create space &lt;spaceid&gt; with dimensionality &lt;int&gt;
+</code></pre>
+
+<p>where <code>&lt;spaceid&gt;</code> is a legal identifier in accordance with the java programming language, and <code>&lt;int&gt;</code>
+is an integer that specifies the size of the vectors that can be inserted into this space. For 
+example:</p>
+
+<pre><code>create space myspace with dimensionality 2
+</code></pre>
+
+<h3 id="inserting-vectors-into-a-vector-space">Inserting vectors into a Vector Space</h3>
+
+<pre><code>insert &lt;vectorid&gt; = &lt;vector&gt; into &lt;spaceid&gt;
+</code></pre>
+
+<p>where <code>&lt;vectorid&gt;</code> is a legal identifier in accordance with the java programming language.  <code>&lt;vector&gt;</code>
+is a comma separated list of real numbers surrounded by square brackets, and <code>&lt;spaceid&gt;</code> refers to
+the identifier used when a space was created.  For example:</p>
+
+<pre><code>insert myvector = [0.2, 0.8] into myspace
+</code></pre>
+
+<h3 id="listing-vector-spaces">Listing Vector Spaces</h3>
+
+<pre><code>list
+</code></pre>
+
+<p>The list command will display all of the Vector Spaces stored in the current database.</p>
+
+<h3 id="showing-the-contents-of-a-vector-space">Showing the contents of a Vector Space</h3>
+
+<pre><code>show &lt;spaceid&gt;[.&lt;vectorid&gt;]
+</code></pre>
+
+<p>You can view the contents of the entire space by simply passing its identifier to the show command, or
+be more specific and show a particular vector by referencing its qualified name.  For example:</p>
+
+<pre><code>show myspace
+</code></pre>
+
+<p>or</p>
+
+<pre><code>show myspace.myvector
+</code></pre>
+
+<h3 id="querying-a-vector-space">Querying a Vector Space</h3>
+
+<pre><code>find &lt;number&gt; nearest to (&lt;vector&gt;|&lt;spaceid&gt;.&lt;vectorid&gt;) in &lt;spaceid&gt;
+</code></pre>
+
+<p>We first specify the <code>&lt;number&gt;</code> of vectors that we require to be returned, then we can either pass
+a <code>&lt;vector&gt;</code> or we can reference one with its qualified name.  For example:</p>
+
+<pre><code>find 10 nearest to [0.5, 0.5] in myspace
+</code></pre>
+
+<p>or</p>
+
+<pre><code>find 100 nearest to anotherspace.anothervector in myspace
+</code></pre>
+
+<h2 id="developing-software-with-the-vectorization-java-api">Developing software with the Vectorization Java API</h2>
+
+<p>Add the vectorization-driver to your classpath.</p>
+
+<h3 id="establishing-a-connection">Establishing a connection</h3>
 <p>Applications start with an instance of Vectorization, which contains a factory method
 for establishing a connection.  This default implementation provides a connection
 to <code>&lt;localhost&gt;</code> on port <code>&lt;4567&gt;</code>; to change this it is best to subclass Vectorization
@@ -87,7 +187,33 @@ or query the Vectorization database.  This can either be entered as a String:  <
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Statement</span> <span class="n">statement</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span>
 <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="s">&quot;login admin with admin&quot;</span><span class="o">);</span></code></pre></div>
 
-<p>or you can use the StatementBuilders as described in the CRUD Tutorials</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">response</span> <span class="o">=</span> <span class="n">StatementBuilders</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="s">&quot;Test&quot;</span><span class="o">).</span><span class="na">execute</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">response</span> <span class="o">=</span> <span class="n">StatementBuilders</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&quot;myspace&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">withDimensionality</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">response</span> <span class="o">=</span> <span class="n">StatementBuilders</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="n">Vectors</span><span class="o">.</span><span class="na">createVector</span><span class="o">(</span><span class="s">&quot;myvector&quot;</span><span class="o">,</span> <span class="mf">0.2</span><span class="o">,</span> <span class="mf">0.8</span><span class="o">))</span>
+                <span class="o">.</span><span class="na">into</span><span class="o">(</span><span class="s">&quot;myspace&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">response</span> <span class="o">=</span> <span class="n">StatementBuilders</span><span class="o">.</span><span class="na">list</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">VectorCollection</span><span class="o">&lt;</span><span class="n">Vector</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">StatementBuilders</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="s">&quot;myspace&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">VectorCollection</span><span class="o">&lt;</span><span class="n">Vector</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">StatementBuilders</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="s">&quot;myspace&quot;</span><span class="o">,</span> <span class="s">&quot;myvector&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">VectorCollection</span><span class="o">&lt;</span><span class="n">Vector</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">StatementBuilders</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">nearestTo</span><span class="o">(</span><span class="n">Vectors</span><span class="o">.</span><span class="na">createVector</span><span class="o">(</span><span class="s">&quot;query&quot;</span><span class="o">,</span> <span class="mf">0.5</span><span class="o">,</span> <span class="mf">0.5</span><span class="o">))</span>
+                <span class="o">.</span><span class="na">in</span><span class="o">(</span><span class="s">&quot;myspace&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">VectorCollection</span><span class="o">&lt;</span><span class="n">Vector</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">StatementBuilders</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">nearestTo</span><span class="o">(</span><span class="s">&quot;anotherspace.anothervector&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">in</span><span class="o">(</span><span class="s">&quot;myspace&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">connection</span><span class="o">);</span></code></pre></div>
 
 
         </section>
